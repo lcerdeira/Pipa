@@ -1,0 +1,2 @@
+/usr/bin/ar qc libteamcity_gtest.a CMakeFiles/teamcity_gtest.dir/teamcity_gtest.cpp.o CMakeFiles/teamcity_gtest.dir/teamcity_messages.cpp.o
+/usr/bin/ranlib libteamcity_gtest.a
