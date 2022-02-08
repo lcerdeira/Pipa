@@ -1,0 +1,2 @@
+/usr/bin/ar qc libbinary_io.a CMakeFiles/binary_io.dir/graph_pack.cpp.o CMakeFiles/binary_io.dir/genomic_info.cpp.o
+/usr/bin/ranlib libbinary_io.a

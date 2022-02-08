@@ -1,0 +1,37 @@
+Command line: /root/bio/Modules/SPAdes-3.15.2/spades.py	-1	/root/bio/Pipa/pipa/data/trimmed/illumina/SQ288_S95_L004_R1_val_1.fq.gz	-2	/root/bio/Pipa/pipa/data/trimmed/illumina/SQ288_S95_L004_R2_val_2.fq.gz	--careful	--cov-cutoff	auto	-o	/root/bio/Pipa/pipa/data/assembly/spades	
+
+System information:
+  SPAdes version: 3.15.2
+  Python version: 2.7.18
+  OS: Linux-5.4.0-51-generic-x86_64-with-Ubuntu-20.04-focal
+
+Output dir: /root/bio/Pipa/pipa/data/assembly/spades
+Mode: read error correction and assembling
+Debug mode is turned OFF
+
+Dataset parameters:
+  Standard mode
+  For multi-cell/isolate data we recommend to use '--isolate' option; for single-cell MDA data use '--sc'; for metagenomic data use '--meta'; for RNA-Seq use '--rna'.
+  Reads:
+    Library number: 1, library type: paired-end
+      orientation: fr
+      left reads: ['/root/bio/Pipa/pipa/data/trimmed/illumina/SQ288_S95_L004_R1_val_1.fq.gz']
+      right reads: ['/root/bio/Pipa/pipa/data/trimmed/illumina/SQ288_S95_L004_R2_val_2.fq.gz']
+      interlaced reads: not specified
+      single reads: not specified
+      merged reads: not specified
+Read error correction parameters:
+  Iterations: 1
+  PHRED offset will be auto-detected
+  Corrected reads will be compressed
+Assembly parameters:
+  k: automatic selection based on read length
+  Repeat resolution is enabled
+  Mismatch careful mode is turned ON
+  MismatchCorrector will be used
+  Coverage cutoff is turned ON and threshold will be auto-detected
+Other parameters:
+  Dir for temp files: /root/bio/Pipa/pipa/data/assembly/spades/tmp
+  Threads: 16
+  Memory limit (in Gb): 31
+

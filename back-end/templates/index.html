@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends "head.html" %}
+{% block content %}
+<body>
+    <nav class="navbar navbar-light bg-light">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Pipa</span>
+      </div>
+    </nav>
+    <div class="jumbotron">
+            <h1 class="display-4">Welcome to PiPa!</h1>
+            <hr class="my-4">
+            <p>Send a Raw FastQ file.</p>
+            <form action="save_file" method="POST" enctype="multipart/form-data">
+                <div class="form-check form-switch">
+                  <input name="illumina" class="form-check-input" type="checkbox" data-bs-toggle="collapse" href="#Illumina" role="button" aria-expanded="false" aria-controls="Illumina">
+                  <label class="form-check-label" for="flexSwitchCheckDefault">Illumina</label>
+                </div>
+                <div class="collapse" id="Illumina">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="type_end" value="single" id="flexRadioDefault1">
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        Single-end
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="type_end"  value="paread" id="flexRadioDefault2">
+                      <label class="form-check-label" for="flexRadioDefault2">
+                        Paread-end
+                      </label>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Select File</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" multiple="multiple" height="auto" name="file_illumina" class="custom-file-input" id="file_1" aria-describedby="inputGroupFileAddon01">
+                            <label style="height: auto;" class="custom-file-label" for="file_1" id="namefile_1">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-check form-switch">
+                  <input name="nanopore" class="form-check-input" type="checkbox"  data-bs-toggle="collapse" href="#Nanopore" role="button" aria-expanded="false" aria-controls="Nanopore">
+                  <label class="form-check-label" for="flexSwitchCheckDefault">Nanopore</label>
+                </div>
+                <div class="input-group mb-3 collapse" id="Nanopore">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupFileAddon02">Select File</span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" multiple="multiple" height="auto" name="file_nanopore" class="custom-file-input" id="file_2" aria-describedby="inputGroupFileAddon01">
+                        <label style="height: auto;" class="custom-file-label" for="file_2" id="namefile_2">Choose file</label>
+                    </div>
+                </div>
+
+                <div class="form-check form-switch">
+                  <input name="pacbio" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" data-bs-toggle="collapse" href="#Pacbio" role="button" aria-expanded="false" aria-controls="Pacbio">
+                  <label class="form-check-label" for="flexSwitchCheckDefault">Pacbio</label>
+                </div>
+                <div class="input-group mb-3 collapse" id="Pacbio">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupFileAddon03">Select File</span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" multiple="multiple" height="auto" name="file_pacbio" class="custom-file-input" id="file_3" aria-describedby="inputGroupFileAddon01">
+                        <label style="height: auto;" class="custom-file-label" for="file_1" id="namefile_3">Choose file</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary">Send File</button>
+            </form>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script>
+
+            var input_file_1 = document.getElementById("file_1");
+            var input_file_2 = document.getElementById("file_2");
+            var input_file_3 = document.getElementById("file_3");
+            var div_type_files = document.getElementById("type_files");
+
+            function RenameInputFileName(){
+                name_file = this.id.replace("file", "namefile");
+                let input_file_name = document.getElementById(name_file);
+                input_file_name.innerHTML = ""
+                for (file of this.files){
+                    input_file_name.innerHTML += file.name+"<br>"
+                }
+            }
+            input_file_1.addEventListener("change", RenameInputFileName);
+            input_file_2.addEventListener("change", RenameInputFileName);
+            input_file_3.addEventListener("change", RenameInputFileName);
+        </script>
+
+</body>
+{% endblock %}
+</html>

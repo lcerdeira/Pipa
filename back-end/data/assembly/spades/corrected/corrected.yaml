@@ -1,0 +1,9 @@
+- "left reads":
+  - "/root/bio/Pipa/pipa/data/assembly/spades/corrected/SQ288_S95_L004_R1_val_1.fq.00.0_0.cor.fastq.gz"
+  "number": !!int "1"
+  "orientation": "fr"
+  "right reads":
+  - "/root/bio/Pipa/pipa/data/assembly/spades/corrected/SQ288_S95_L004_R2_val_2.fq.00.0_0.cor.fastq.gz"
+  "single reads":
+  - "/root/bio/Pipa/pipa/data/assembly/spades/corrected/SQ288_S95_L004_R_unpaired.00.0_0.cor.fastq.gz"
+  "type": "paired-end"

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmapping_printer.a CMakeFiles/mapping_printer.dir/mapping_printer.cpp.o
+/usr/bin/ranlib libmapping_printer.a

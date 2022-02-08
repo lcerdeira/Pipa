@@ -1,0 +1,2 @@
+/usr/bin/ar qc libhmmercpp.a CMakeFiles/hmmercpp.dir/hmmfile.cpp.o CMakeFiles/hmmercpp.dir/hmmmatcher.cpp.o
+/usr/bin/ranlib libhmmercpp.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libinput.a CMakeFiles/input.dir/reads/parser.cpp.o CMakeFiles/input.dir/reads/paired_readers.cpp.o CMakeFiles/input.dir/reads/binary_converter.cpp.o CMakeFiles/input.dir/reads/binary_streams.cpp.o CMakeFiles/input.dir/reads/io_helper.cpp.o CMakeFiles/input.dir/dataset_support/read_converter.cpp.o CMakeFiles/input.dir/dataset_support/dataset_readers.cpp.o CMakeFiles/input.dir/sam/read.cpp.o CMakeFiles/input.dir/sam/sam_reader.cpp.o
+/usr/bin/ranlib libinput.a

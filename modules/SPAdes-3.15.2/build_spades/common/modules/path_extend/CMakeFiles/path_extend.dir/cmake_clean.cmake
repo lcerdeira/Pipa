@@ -1,0 +1,41 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/path_extend.dir/gap_analyzer.cpp.o"
+  "CMakeFiles/path_extend.dir/gap_analyzer.cpp.o.d"
+  "CMakeFiles/path_extend.dir/loop_detector.cpp.o"
+  "CMakeFiles/path_extend.dir/loop_detector.cpp.o.d"
+  "CMakeFiles/path_extend.dir/loop_traverser.cpp.o"
+  "CMakeFiles/path_extend.dir/loop_traverser.cpp.o.d"
+  "CMakeFiles/path_extend.dir/overlap_remover.cpp.o"
+  "CMakeFiles/path_extend.dir/overlap_remover.cpp.o.d"
+  "CMakeFiles/path_extend.dir/path_extenders.cpp.o"
+  "CMakeFiles/path_extend.dir/path_extenders.cpp.o.d"
+  "CMakeFiles/path_extend.dir/pe_config_struct.cpp.o"
+  "CMakeFiles/path_extend.dir/pe_config_struct.cpp.o.d"
+  "CMakeFiles/path_extend.dir/pe_resolver.cpp.o"
+  "CMakeFiles/path_extend.dir/pe_resolver.cpp.o.d"
+  "CMakeFiles/path_extend.dir/pipeline/extenders_logic.cpp.o"
+  "CMakeFiles/path_extend.dir/pipeline/extenders_logic.cpp.o.d"
+  "CMakeFiles/path_extend.dir/pipeline/launch_support.cpp.o"
+  "CMakeFiles/path_extend.dir/pipeline/launch_support.cpp.o.d"
+  "CMakeFiles/path_extend.dir/pipeline/launcher.cpp.o"
+  "CMakeFiles/path_extend.dir/pipeline/launcher.cpp.o.d"
+  "CMakeFiles/path_extend.dir/scaffolder2015/connection_condition2015.cpp.o"
+  "CMakeFiles/path_extend.dir/scaffolder2015/connection_condition2015.cpp.o.d"
+  "CMakeFiles/path_extend.dir/scaffolder2015/extension_chooser2015.cpp.o"
+  "CMakeFiles/path_extend.dir/scaffolder2015/extension_chooser2015.cpp.o.d"
+  "CMakeFiles/path_extend.dir/scaffolder2015/path_polisher.cpp.o"
+  "CMakeFiles/path_extend.dir/scaffolder2015/path_polisher.cpp.o.d"
+  "CMakeFiles/path_extend.dir/scaffolder2015/scaffold_graph.cpp.o"
+  "CMakeFiles/path_extend.dir/scaffolder2015/scaffold_graph.cpp.o.d"
+  "CMakeFiles/path_extend.dir/scaffolder2015/scaffold_graph_constructor.cpp.o"
+  "CMakeFiles/path_extend.dir/scaffolder2015/scaffold_graph_constructor.cpp.o.d"
+  "CMakeFiles/path_extend.dir/scaffolder2015/scaffold_graph_visualizer.cpp.o"
+  "CMakeFiles/path_extend.dir/scaffolder2015/scaffold_graph_visualizer.cpp.o.d"
+  "libpath_extend.a"
+  "libpath_extend.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/path_extend.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

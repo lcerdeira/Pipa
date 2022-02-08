@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpipeline.a CMakeFiles/pipeline.dir/config_struct.cpp.o CMakeFiles/pipeline.dir/graph_pack.cpp.o CMakeFiles/pipeline.dir/library.cpp.o CMakeFiles/pipeline.dir/library_data.cpp.o CMakeFiles/pipeline.dir/stage.cpp.o
+/usr/bin/ranlib libpipeline.a
