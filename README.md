@@ -27,4 +27,4 @@ Pipeline for Microbial Genomic Analysis
 
 ## Contact
 
-Dr louise Cerdeira - Louise.Cerdeira@gmail.com
+Dr Louise Cerdeira - Louise.Cerdeira@gmail.com
