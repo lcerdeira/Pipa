@@ -26,3 +26,5 @@ Pipeline for Microbial Genomic Analysis
 - Run `./setup.sh` to install all necessary libraries.
 
 ## Contact
+
+Dr louise Cerdeira - Louise.Cerdeira@gmail.com
