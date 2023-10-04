@@ -17,7 +17,7 @@
         "vue-tweet-embed": "^2.4.0"
     },
     "devDependencies": {
-        "@quasar/app": "^2.4.3",
+        "@quasar/app": "^3.3.3",
         "babel-eslint": "^10.0.1",
         "devtron": "^1.4.0",
         "electron": "^22.3.24",
