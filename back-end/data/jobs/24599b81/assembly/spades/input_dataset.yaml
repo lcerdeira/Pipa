@@ -1,0 +1,7 @@
+- "left reads":
+  - "/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/trimmed/illumina/ecoli_R1_val_1.fq.gz"
+  "number": !!int "1"
+  "orientation": "fr"
+  "right reads":
+  - "/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/trimmed/illumina/ecoli_R2_val_2.fq.gz"
+  "type": "paired-end"

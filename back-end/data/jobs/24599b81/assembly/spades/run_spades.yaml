@@ -1,0 +1,109 @@
+- STAGE: Before start
+  args: []
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: 'true'
+  short_name: before_start
+- STAGE: Assembling
+  args: []
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: 'true'
+  short_name: as_start
+- STAGE: K21
+  args:
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K21/configs/config.info
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K21/configs/isolate_mode.info
+  config_dir: K21
+  del_after: []
+  output_files: []
+  path: /opt/homebrew/Caskroom/mambaforge/base/envs/pipa/bin/spades-core
+  short_name: k21
+- STAGE: K33
+  args:
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K33/configs/config.info
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K33/configs/isolate_mode.info
+  config_dir: K33
+  del_after: []
+  output_files: []
+  path: /opt/homebrew/Caskroom/mambaforge/base/envs/pipa/bin/spades-core
+  short_name: k33
+- STAGE: K55
+  args:
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K55/configs/config.info
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K55/configs/isolate_mode.info
+  config_dir: K55
+  del_after: []
+  output_files: []
+  path: /opt/homebrew/Caskroom/mambaforge/base/envs/pipa/bin/spades-core
+  short_name: k55
+- STAGE: K77
+  args:
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/configs/config.info
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/configs/isolate_mode.info
+  config_dir: K77
+  del_after: []
+  output_files: []
+  path: /opt/homebrew/Caskroom/mambaforge/base/envs/pipa/bin/spades-core
+  short_name: k77
+- STAGE: Copy files
+  args:
+  - /opt/homebrew/Caskroom/mambaforge/base/envs/pipa/share/spades/spades_pipeline/scripts/copy_files.py
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/before_rr.fasta
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/before_rr.fasta
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/assembly_graph_after_simplification.gfa
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/assembly_graph_after_simplification.gfa
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/final_contigs.fasta
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/contigs.fasta
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/first_pe_contigs.fasta
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/first_pe_contigs.fasta
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/strain_graph.gfa
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/strain_graph.gfa
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/scaffolds.fasta
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/scaffolds.fasta
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/scaffolds.paths
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/scaffolds.paths
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/assembly_graph_with_scaffolds.gfa
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/assembly_graph_with_scaffolds.gfa
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/assembly_graph.fastg
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/assembly_graph.fastg
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/K77/final_contigs.paths
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/contigs.paths
+  config_dir: ''
+  del_after:
+  - .bin_reads
+  - tmp/spades_ag9zk6vc
+  output_files: []
+  path: /opt/homebrew/Caskroom/mambaforge/base/envs/pipa/bin/python3
+  short_name: copy_files
+- STAGE: Assembling
+  args: []
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: 'true'
+  short_name: as_finish
+- STAGE: Breaking scaffolds
+  args:
+  - /opt/homebrew/Caskroom/mambaforge/base/envs/pipa/share/spades/spades_pipeline/scripts/breaking_scaffolds_script.py
+  - --result_scaffolds_filename
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/scaffolds.fasta
+  - --misc_dir
+  - /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/misc
+  - --threshold_for_breaking_scaffolds
+  - '3'
+  config_dir: ''
+  del_after: []
+  output_files: []
+  path: /opt/homebrew/Caskroom/mambaforge/base/envs/pipa/bin/python3
+  short_name: bs
+- STAGE: Terminate
+  args: []
+  config_dir: ''
+  del_after:
+  - configs
+  output_files: []
+  path: 'true'
+  short_name: terminate

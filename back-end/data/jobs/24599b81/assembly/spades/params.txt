@@ -1,0 +1,33 @@
+Command line: /opt/homebrew/Caskroom/mambaforge/base/envs/pipa/bin/spades.py	-1	/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/trimmed/illumina/ecoli_R1_val_1.fq.gz	-2	/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/trimmed/illumina/ecoli_R2_val_2.fq.gz	--isolate	--cov-cutoff	auto	-o	/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades	
+
+System information:
+  SPAdes version: 4.0.0
+  Python version: 3.10.8
+  OS: macOS-26.4-x86_64-i386-64bit
+
+Output dir: /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades
+Mode: ONLY assembling (without read error correction)
+Debug mode is turned OFF
+
+Dataset parameters:
+  Isolate mode
+  Reads:
+    Library number: 1, library type: paired-end
+      orientation: fr
+      left reads: ['/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/trimmed/illumina/ecoli_R1_val_1.fq.gz']
+      right reads: ['/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/trimmed/illumina/ecoli_R2_val_2.fq.gz']
+      interlaced reads: not specified
+      single reads: not specified
+      merged reads: not specified
+Assembly parameters:
+  k: automatic selection based on read length
+  Repeat resolution is enabled
+  Mismatch careful mode is turned OFF
+  MismatchCorrector will be SKIPPED
+  Coverage cutoff is turned ON and threshold will be auto-detected
+  Assembly graph output will use GFA v1.2 format
+Other parameters:
+  Dir for temp files: /Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/tmp
+  Threads: 16
+  Memory limit (in Gb): 250
+

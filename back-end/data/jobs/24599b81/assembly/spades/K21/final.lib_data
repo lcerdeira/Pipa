@@ -1,0 +1,36 @@
+£---
+max read length: 150
+nomerge max read length: 150
+average read length: 149.537
+average coverage: 5.69199
+libraries:
+  - type:            paired-end
+    number:          1
+    orientation:     fr
+    left reads:
+      - '/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/trimmed/illumina/ecoli_R1_val_1.fq.gz'
+    right reads:
+      - '/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/trimmed/illumina/ecoli_R2_val_2.fq.gz'
+    data:
+      unmerged read length: 150
+      merged read length: 0
+      insert size mean: 0
+      insert size deviation: 0
+      insert size left quantile: 0
+      insert size right quantile: 0
+      insert size median: 0
+      insert size mad: 0
+      insert size distribution: {  }
+      pi threshold:    0
+      binary reads info:
+        binary converted: true
+        bin reads info file: '/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/.bin_reads/INFO_0'
+        paired read prefix: '/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/.bin_reads/paired_0'
+        merged read prefix: '/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/.bin_reads/merged_0'
+        single read prefix: '/Users/lshlt19/GitHub/Pipa/back-end/data/jobs/24599b81/assembly/spades/.bin_reads/single_0'
+        chunk num:       8
+      single reads mapped: false
+      library index:   0
+      number of reads: 199986
+      total nucleotides: 29905398
+...
