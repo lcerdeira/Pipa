@@ -6,6 +6,8 @@ repo_name: lcerdeira/Pipa
 
 theme:
   name: material
+  logo: assets/PipaLogo.jpeg
+  favicon: assets/PipaLogo.jpeg
   palette:
     primary: teal
     accent: amber

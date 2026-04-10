@@ -6,8 +6,11 @@
 ![Version](https://img.shields.io/badge/version-2.0-red)
 ![License](https://img.shields.io/badge/license-GPLv3-blue)
 ![Last Commit](https://img.shields.io/github/last-commit/lcerdeira/pipa)
+[![Documentation](https://readthedocs.org/projects/pipa/badge/?version=latest)](https://pipa.readthedocs.io)
 
-PIPA is an integrated platform for microbial genomic analysis that supports Illumina, Nanopore, and PacBio sequencing data. It provides a desktop application (Electron) with a Flask backend that orchestrates bioinformatics tools for read trimming, genome assembly, gene prediction, and reporting.
+PIPA is an integrated platform for microbial genomic analysis that supports Illumina, Nanopore, and PacBio sequencing data. It provides a web interface with a Flask backend that orchestrates bioinformatics tools for read trimming, genome assembly, gene prediction, and reporting.
+
+**[Full Documentation](https://pipa.readthedocs.io)**
 
 ## Pipeline Stages
 
