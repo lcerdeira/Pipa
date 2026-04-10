@@ -31,26 +31,13 @@
                 </q-item>
                 <q-separator :key="'sep' + index"/>
               </div>
-              <q-expansion-item
-                expand-separator
-                icon="ion-logo-twitter"
-                label="Twitter"
-                style="font-size: 16px"
-                expand-icon-class="text-black"
-              >
-                <q-scroll-area style="height: 350px" :thumb-style="{backgroundColor: 'transparent'}">
-                  <!-- <timeline id="lcerdeira" sourceType="profile" :options="{ theme: 'dark' }"/> -->
-                  <timeline id="lcerdeira" sourceType="profile"/>
-                </q-scroll-area>
-              </q-expansion-item>
-              <q-separator :key="'sep5'"/>
             </q-list>
           </div>
         </div>
       </q-scroll-area>
     </q-drawer>
     <q-footer v-if="currentPage === 0" class="bg-primary text-black column justify-center items-center" style="height: 40px">
-      <div>Copyright - 2021</div>
+      <div>Copyright - 2021-2026</div>
     </q-footer>
     <q-page-container>
       <router-view :model="currentPage"/>
@@ -68,17 +55,15 @@ const menuList = [
   },
   {
     icon: 'ion-book',
-    label: 'Wiki',
-    link: 'https://github.com/lcerdeira/Pipa/wiki'
+    label: 'Documentation',
+    link: 'https://pipa.readthedocs.io'
   }
 ]
 
-import { Timeline } from 'vue-tweet-embed'
 import { openURL } from 'quasar'
 
 export default {
   name: 'MainLayout',
-  components: { Timeline },
   data () {
     return {
       menuList,

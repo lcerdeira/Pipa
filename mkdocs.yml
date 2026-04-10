@@ -1,0 +1,44 @@
+site_name: PIPA Documentation
+site_description: Pipeline for Microbial Genomic Analysis
+site_author: Dr Louise Cerdeira
+repo_url: https://github.com/lcerdeira/Pipa
+repo_name: lcerdeira/Pipa
+
+theme:
+  name: material
+  palette:
+    primary: teal
+    accent: amber
+  features:
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+  - User Guide:
+    - Annotation Workflow: user-guide/annotation.md
+    - Full Pipeline: user-guide/full-pipeline.md
+    - Supported Tools: user-guide/tools.md
+  - API Reference: api/endpoints.md
+  - Development:
+    - Contributing: development/contributing.md
+    - Architecture: development/architecture.md
+  - About:
+    - Citation: about/citation.md
+    - License: about/license.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
