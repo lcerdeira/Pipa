@@ -1,13 +1,2 @@
-from dynaconf import FlaskDynaconf
-from importlib import import_module
-
-dyna = FlaskDynaconf()
-
-def init_app(app):
-    dyna.init_app(app)
-
-def load_modules(app):
-
-    for module in app.config.get("EXTENSIONS"):
-        mod = import_module(module)
-        mod.init_app(app)
+# This module is no longer used. Flask configuration and blueprint registration
+# are handled directly in app.py. Kept as empty file for backwards compatibility.

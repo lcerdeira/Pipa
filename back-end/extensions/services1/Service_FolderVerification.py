@@ -1,34 +1,37 @@
-import subprocess
+import logging
 import os
 
-def FolderVerificationRun():
-   
-    files = os.listdir("pipa/")
-    if "data" not in files:
-        os.mkdir("pipa/data")
-    files = os.listdir("pipa/static/")
-    if "report" not in files:
-        os.mkdir("pipa/static/report")
-    files = os.listdir("pipa/data")
-    folders_tools = ["assembly", "input", "predicted", "trimmed"]
-    for f in folders_tools:
-        if f not in files:
-            path = "pipa/data/"+f
-            os.mkdir(path)
-    folders_trimm = ["illumina", "nanopore", "pacbio"]
-    files_input = os.listdir("pipa/data/input")
-    files_trimmed = os.listdir("pipa/data/trimmed")
-    for f in folders_trimm:
-        if f not in files_input:
-            path = "pipa/data/input/"+f
-            os.mkdir(path)
-        if f not in files_trimmed:
-            path = "pipa/data/trimmed/"+f
-            os.mkdir(path)
-    files_predicted = os.listdir("pipa/data/predicted")
-    folders_predicted = ["abricate", "barrnap",
-                            "kleborate", "kofam", "mlst", "phigaro", "prokka"]
-    for f in folders_predicted:
-        if f not in files_predicted:
-            path = "pipa/data/predicted/"+f
-            os.mkdir(path)
+logger = logging.getLogger(__name__)
+
+
+class FolderVerificationService:
+    """Ensures the required directory structure exists for the pipeline."""
+
+    def __init__(self, data_dir):
+        self.data_dir = data_dir
+
+    def run(self):
+        """Create all required directories if they don't exist."""
+        dirs = [
+            os.path.join(self.data_dir, "input", "illumina"),
+            os.path.join(self.data_dir, "input", "nanopore"),
+            os.path.join(self.data_dir, "input", "pacbio"),
+            os.path.join(self.data_dir, "trimmed", "illumina"),
+            os.path.join(self.data_dir, "trimmed", "nanopore"),
+            os.path.join(self.data_dir, "trimmed", "pacbio"),
+            os.path.join(self.data_dir, "assembly", "spades"),
+            os.path.join(self.data_dir, "assembly", "canu"),
+            os.path.join(self.data_dir, "assembly", "flye"),
+            os.path.join(self.data_dir, "assembly", "unicycler"),
+            os.path.join(self.data_dir, "predicted", "prokka"),
+            os.path.join(self.data_dir, "predicted", "mlst"),
+            os.path.join(self.data_dir, "predicted", "barrnap"),
+            os.path.join(self.data_dir, "predicted", "abricate"),
+            os.path.join(self.data_dir, "predicted", "kleborate"),
+            os.path.join(self.data_dir, "predicted", "kofam"),
+            os.path.join(self.data_dir, "predicted", "phigaro"),
+            os.path.join(self.data_dir, "reports"),
+        ]
+        for d in dirs:
+            os.makedirs(d, exist_ok=True)
+            logger.debug("Ensured directory exists: %s", d)

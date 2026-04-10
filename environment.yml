@@ -1,0 +1,26 @@
+name: pipa
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.10
+  - flask>=2.3
+  - flask-cors>=4.0
+  - werkzeug>=2.3
+  # Trimming
+  - trim-galore=0.6.10
+  - porechop
+  # Assembly
+  - spades>=3.15
+  - flye>=2.9
+  - unicycler
+  - canu
+  # Annotation & Prediction
+  - prokka=1.14.6
+  - mlst
+  - barrnap
+  - abricate
+  # Utilities
+  - samtools
+  - bcftools

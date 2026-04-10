@@ -176,28 +176,40 @@
           <div class="row">
             <div class="col-grow column">
               <div>Genus</div>
-              <q-btn-dropdown color="primary" :label="info.genus" class="col-grow text-black">
-                <q-list>
-                  <q-item v-for="(gene, i) in genusItems" :key="gene+i" clickable v-close-popup @click="info.genus = gene">
-                    <q-item-section>
-                      <q-item-label>{{gene}}</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-btn-dropdown>
+              <q-select
+                filled
+                v-model="info.genus"
+                :options="filteredGenusOptions"
+                use-input
+                input-debounce="0"
+                @filter="filterGenus"
+                new-value-mode="add-unique"
+                hint="Select or type a custom genus"
+              />
             </div>
             <div class="q-mx-sm"></div>
             <div class="col-grow column">
               <div>Species</div>
-              <q-btn-dropdown color="primary" :label="info.species" class="col-grow text-black">
-                <q-list>
-                  <q-item v-for="(specie, i) in speciesItems" :key="specie+i" clickable v-close-popup @click="info.species = specie">
-                    <q-item-section>
-                      <q-item-label>{{specie}}</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-btn-dropdown>
+              <q-select
+                filled
+                v-model="info.species"
+                :options="filteredSpeciesOptions"
+                use-input
+                input-debounce="0"
+                @filter="filterSpecies"
+                new-value-mode="add-unique"
+                hint="Select or type a custom species"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-grow column">
+              <div>Genome Size (for Nanopore assembly)</div>
+              <q-input
+                filled
+                v-model="info.genomeSize"
+                hint="e.g., 5m, 4.8m, 2.5m"
+              />
             </div>
           </div>
           <div class="q-pb-md">
@@ -216,7 +228,9 @@
           <q-btn
             class="my-button full-width"
             icon-right="send"
-            label="Submit"
+            :label="submitting ? 'Submitting...' : 'Submit'"
+            :loading="submitting"
+            :disable="submitting"
             @click="onSubmit"
           />
         </q-form>
@@ -224,23 +238,15 @@
           <q-list bordered padding class="rounded-borders col-grow">
             <q-item-label header class="text-weight-bold q-mt-xs row justify-between items-center">
               <div>Previous Jobs Run</div>
-              <q-chip class="text-black q-ma-none" style="height: 20px">{{samples.length}}</q-chip>
+              <q-chip class="text-black q-ma-none" style="height: 20px">{{previousJobs.length}}</q-chip>
             </q-item-label>
-            <div v-for="(sample, i) in samples" :key="'samples'+i">
+            <div v-for="(job, i) in previousJobs" :key="'jobs'+i">
               <q-separator/>
               <q-item clickable v-ripple>
-                <!-- <q-item-section avatar top>
-                  <q-avatar icon="folder" color="primary" text-color="white" />
-                </q-item-section> -->
-
                 <q-item-section>
-                  <q-item-label lines="1">{{sample.name}}</q-item-label>
-                  <q-item-label caption>{{sample.date}}</q-item-label>
+                  <q-item-label lines="1">Job {{ job.jobId }}</q-item-label>
+                  <q-item-label caption>{{ job.date }} - {{ job.status }}</q-item-label>
                 </q-item-section>
-
-                <!-- <q-item-section side>
-                  <q-icon name="info" color="green" />
-                </q-item-section> -->
               </q-item>
             </div>
           </q-list>
@@ -255,7 +261,7 @@
 const programs = [
   {
     name: 'Illumina',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    description: 'Short-read sequencing platform for high-throughput genomic analysis.',
     isChecked: false,
     files: null,
     icon: 'illumina.jpg',
@@ -263,7 +269,7 @@ const programs = [
   },
   {
     name: 'Nanopore',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    description: 'Long-read sequencing technology for real-time, portable genomic analysis.',
     isChecked: false,
     files: null,
     icon: 'nanopore.jpg',
@@ -271,22 +277,28 @@ const programs = [
   },
   {
     name: 'Pacbio',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    description: 'Long-read sequencing platform with high accuracy for comprehensive genome assembly.',
     isChecked: false,
     files: null,
     icon: 'pacbio.png',
     link: 'https://www.pacb.com/'
   }
 ]
-const genusItems = ['gene1', 'gene2', 'gene3']
-const speciesItems = ['specie1', 'specie2', 'specie3']
-const info = {
-  metadata: null,
-  sampleName: 'My_Sample1',
-  genus: genusItems[0],
-  species: speciesItems[0],
-  description: null
-}
+
+const genusItems = [
+  'Acinetobacter', 'Bacillus', 'Burkholderia', 'Campylobacter', 'Clostridioides',
+  'Clostridium', 'Corynebacterium', 'Enterobacter', 'Enterococcus', 'Escherichia',
+  'Haemophilus', 'Helicobacter', 'Klebsiella', 'Legionella', 'Listeria',
+  'Mycobacterium', 'Neisseria', 'Pseudomonas', 'Salmonella', 'Serratia',
+  'Shigella', 'Staphylococcus', 'Streptococcus', 'Vibrio', 'Yersinia'
+]
+
+const speciesItems = [
+  'aeruginosa', 'anthracis', 'aureus', 'baumannii', 'cereus', 'coli',
+  'difficile', 'enterica', 'faecalis', 'faecium', 'influenzae',
+  'monocytogenes', 'pneumoniae', 'pyogenes', 'tuberculosis', 'typhimurium'
+]
+
 const options = [
   {
     title: 'Choose Sequence Platforms',
@@ -295,19 +307,6 @@ const options = [
   {
     title: 'Choose Files',
     color: '#FFBD08'
-  }
-]
-
-const samples = [
-  {
-    name: 'My_Sample_78',
-    date: 'February 22nd, 2021',
-    results: null
-  },
-  {
-    name: 'My_Sample_79',
-    date: 'February 23nd, 2021',
-    results: null
   }
 ]
 
@@ -320,7 +319,14 @@ export default {
       options,
       programs,
       files: null,
-      info,
+      info: {
+        metadata: null,
+        sampleName: 'My_Sample1',
+        genus: genusItems[12], // Klebsiella
+        species: speciesItems[11], // pneumoniae
+        genomeSize: '5m',
+        description: null
+      },
       types_illumina: [
         { val: 0, label: 'Single-end' },
         { val: 1, label: 'Paired-end' }
@@ -329,7 +335,9 @@ export default {
       type_aux: 0,
       genusItems,
       speciesItems,
-      samples
+      filteredGenusOptions: genusItems,
+      filteredSpeciesOptions: speciesItems,
+      submitting: false
     }
   },
   computed: {
@@ -340,10 +348,25 @@ export default {
       set (val) {
         this.$store.commit('pipa/changePage', val)
       }
+    },
+    previousJobs () {
+      return this.$store.state.pipa.previousJobs
     }
   },
   methods: {
     openURL,
+    filterGenus (val, update) {
+      update(() => {
+        const needle = val.toLowerCase()
+        this.filteredGenusOptions = genusItems.filter(v => v.toLowerCase().indexOf(needle) > -1)
+      })
+    },
+    filterSpecies (val, update) {
+      update(() => {
+        const needle = val.toLowerCase()
+        this.filteredSpeciesOptions = speciesItems.filter(v => v.toLowerCase().indexOf(needle) > -1)
+      })
+    },
     checkBox (index) {
       this.programs[index].isChecked = !this.programs[index].isChecked
     },
@@ -360,8 +383,9 @@ export default {
       this.info = {
         metadata: null,
         sampleName: 'My_Sample1',
-        genus: genusItems[0],
-        species: speciesItems[0],
+        genus: genusItems[12],
+        species: speciesItems[11],
+        genomeSize: '5m',
         description: null
       }
       this.type_illumina = 0
@@ -369,40 +393,68 @@ export default {
         this.programs[i].files = null
         this.programs[i].isChecked = false
       }
+      this.$store.commit('pipa/resetPipeline')
     },
-    onSubmit () {
-      const results = {
+    async onSubmit () {
+      const fileData = {
         illumina: this.programs[0].files,
-        typeIllumina: this.type_illumina,
         nanopore: this.programs[1].files,
-        pacbio: this.programs[2].files,
-        metadata: this.info.metadata,
-        sampleName: this.info.sampleName,
-        genus: this.info.genus,
-        species: this.info.species,
-        description: this.info.description
+        pacbio: this.programs[2].files
       }
-      const checkNull = arr => arr.every(val => val === null)
-      const allNull = checkNull([results.illumina, results.nanopore, results.pacbio])
+      const hasFiles = fileData.illumina || fileData.nanopore || fileData.pacbio
 
-      this.$refs.myform.validate().then(success => {
-        if (!allNull) {
-          if (success) {
-            console.log(results)
-            this.currentPage = 2
-          }
-        } else {
-          this.$q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'warning',
-            message: 'Please choose at least one sequence platform'
-          })
-        }
-      })
+      const success = await this.$refs.myform.validate()
+      if (!success) return
+
+      if (!hasFiles) {
+        this.$q.notify({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'warning',
+          message: 'Please choose at least one sequence platform'
+        })
+        return
+      }
+
+      this.submitting = true
+      try {
+        // Step 1: Upload files
+        await this.$store.dispatch('pipa/uploadFiles', {
+          files: fileData,
+          illuminaType: this.type_illumina
+        })
+
+        // Step 2: Start pipeline
+        await this.$store.dispatch('pipa/startPipeline', {
+          genus: this.info.genus,
+          species: this.info.species,
+          sampleName: this.info.sampleName,
+          genomeSize: this.info.genomeSize
+        })
+
+        this.$q.notify({
+          color: 'green-5',
+          textColor: 'white',
+          icon: 'check',
+          message: 'Pipeline started successfully!'
+        })
+
+        // Navigate to Results page
+        this.currentPage = 2
+      } catch (error) {
+        console.error('Submission failed:', error)
+        this.$q.notify({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'warning',
+          message: 'Failed to start pipeline: ' + (error.response ? error.response.data.error : error.message)
+        })
+      } finally {
+        this.submitting = false
+      }
     },
     handleScroll () {
-      const ele = document.getElementById('software') // You need to get your element here
+      const ele = document.getElementById('software')
       const target = getScrollTarget(ele)
       const offset = ele.offsetTop - ele.scrollHeight
       const duration = 0

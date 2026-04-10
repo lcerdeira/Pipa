@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  backend:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - pipa-data:/data
+    environment:
+      - PIPA_DATA_DIR=/data
+      - FLASK_ENV=production
+    restart: unless-stopped
+
+volumes:
+  pipa-data:
