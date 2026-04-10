@@ -66,8 +66,10 @@ class PredictService:
                 continue
             for f in os.listdir(folder_path):
                 if f.endswith((".fasta", ".fa", ".fna")):
-                    fastas.append(os.path.join(folder_path, f))
-                    break  # one fasta per assembler
+                    fpath = os.path.join(folder_path, f)
+                    if os.path.getsize(fpath) > 0:
+                        fastas.append(fpath)
+                        break  # one fasta per assembler
         return fastas
 
     def _should_run(self, tool_key):

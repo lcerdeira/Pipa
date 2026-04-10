@@ -47,7 +47,7 @@ class AssemblyService:
                     r2 = os.path.join(illumina_dir, files[i + 1])
                     command = [
                         "spades.py", "-1", r1, "-2", r2,
-                        "--careful", "--cov-cutoff", "auto",
+                        "--isolate", "--cov-cutoff", "auto",
                         "-o", spades_out,
                     ]
                     self._run_cmd(command, f"SPAdes paired ({files[i]}, {files[i+1]})")
