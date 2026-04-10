@@ -21,7 +21,7 @@
             <q-separator :key="'sep'"/>
             <q-list>
               <div v-for="(menuItem, index) in menuList" :key="menuItem+index">
-                <q-item style="font-size: 16px" dark :key="index" clickable :active="menuItem.label === 'Outbox'" v-ripple @click="openURL(menuItem.link)">
+                <q-item style="font-size: 16px" dark :key="index" clickable :active="menuItem.label === 'Outbox'" v-ripple @click="openExternal(menuItem.link)">
                   <q-item-section avatar>
                     <q-icon :name="menuItem.icon" color="black"/>
                   </q-item-section>
@@ -60,8 +60,6 @@ const menuList = [
   }
 ]
 
-import { openURL } from 'quasar'
-
 export default {
   name: 'MainLayout',
   data () {
@@ -78,7 +76,13 @@ export default {
     }
   },
   methods: {
-    openURL
+    openExternal (url) {
+      if (window.__TAURI__) {
+        window.__TAURI__.shell.open(url)
+      } else {
+        window.open(url, '_blank')
+      }
+    }
   }
 }
 </script>
