@@ -36,7 +36,7 @@ def upload_files():
     """
     data_dir = current_app.config["PIPA_DATA_DIR"]
     job_id = str(uuid.uuid4())[:8]
-    job_data_dir = os.path.join(data_dir, "jobs", job_id)
+    job_data_dir = os.path.abspath(os.path.join(data_dir, "jobs", job_id))
 
     uploaded = {}
 
@@ -103,13 +103,33 @@ def run_pipeline():
     if job["status"] == "running":
         return jsonify({"error": "Pipeline is already running"}), 409
 
+    input_type = data.get("input_type", "reads")
+
     config = PipelineConfig(
         genus=data.get("genus", "Unknown"),
         species=data.get("species", "unknown"),
         sample_name=data.get("sample_name", "sample"),
         genome_size=data.get("genome_size", "5m"),
         proteins_file=data.get("proteins_file"),
+        input_type=input_type,
+        tools=data.get("tools", []),
     )
+
+    # If input is an assembled genome, move uploaded files to assembly directory
+    if input_type == "assembly":
+        job_data_dir = job["data_dir"]
+        assembly_dir = os.path.join(job_data_dir, "assembly", "uploaded")
+        os.makedirs(assembly_dir, exist_ok=True)
+        for platform in ["illumina", "nanopore", "pacbio"]:
+            input_dir = os.path.join(job_data_dir, "input", platform)
+            if os.path.isdir(input_dir):
+                for fname in os.listdir(input_dir):
+                    src = os.path.join(input_dir, fname)
+                    # Ensure it has a .fasta extension for prediction to find it
+                    dst_name = fname if fname.endswith((".fasta", ".fa", ".fna")) else fname + ".fasta"
+                    dst = os.path.join(assembly_dir, dst_name)
+                    os.rename(src, dst)
+                    logger.info("Moved %s to assembly dir as %s", fname, dst_name)
 
     job["status"] = "running"
     job["stage"] = "initializing"
@@ -129,14 +149,11 @@ def run_pipeline():
             job["progress"] = int((stage_idx / total_stages) * 100)
 
         try:
-            # Override data_dir for this job
-            original_data_dir = pipa.data_dir
-            pipa.data_dir = job["data_dir"]
-            pipa.ensure_directories()
-
-            results = pipa.run_pipeline(config, status_callback=status_callback)
-
-            pipa.data_dir = original_data_dir
+            results = pipa.run_pipeline(
+                config,
+                data_dir=job["data_dir"],
+                status_callback=status_callback,
+            )
 
             job["results"] = results
             job["status"] = "completed" if not results["errors"] else "completed_with_errors"

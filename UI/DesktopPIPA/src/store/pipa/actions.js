@@ -54,7 +54,9 @@ export async function startPipeline ({ commit, state }, config) {
       genus: config.genus,
       species: config.species,
       sample_name: config.sampleName,
-      genome_size: config.genomeSize
+      genome_size: config.genomeSize,
+      input_type: config.inputType || 'reads',
+      tools: config.tools || []
     }, { timeout: 10000 })
     console.log('[PIPA] Run response:', response.data)
     return response.data

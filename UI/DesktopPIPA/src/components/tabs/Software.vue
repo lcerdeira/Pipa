@@ -12,22 +12,53 @@
         </q-tooltip>
       </q-btn>
     </div>
+
     <div class="column justify-around full-height">
-      <div
-        v-for="(option, index) in options"
-        :key="index + option"
-        class="items-center"
-      >
+      <!-- Step 1: Choose Workflow -->
+      <div class="items-center">
         <div class="row full-width q-pb-lg no-wrap items-center">
-          <div class="num-square" :style="{backgroundColor: option.color}">{{ index + 1 }}</div>
-          <div class="text-h6 text-weight-regular">{{ option.title }}</div>
+          <div class="num-square" style="backgroundColor: #FF3116">1</div>
+          <div class="text-h6 text-weight-regular">Choose Workflow</div>
         </div>
-        <div
-          v-if="index == 0"
-          class="row justify-between full-width"
-          style="padding-bottom: 55px"
-          :class="$q.screen.width < 550 ? '' : 'q-gutter-x-md'"
-        >
+        <div class="row q-gutter-x-md q-pb-lg">
+          <q-card
+            class="my-card my-option cursor-pointer q-pa-md"
+            :class="[workflow === 'reads' ? 'painted' : '']"
+            style="width: 48%"
+            @click="workflow = 'reads'"
+          >
+            <div class="row items-center">
+              <q-icon name="biotech" size="2em" :color="workflow === 'reads' ? 'white' : 'primary'" class="q-mr-md"/>
+              <div>
+                <div class="text-subtitle1 text-weight-bold" :class="workflow === 'reads' ? 'text-white' : ''">Full Pipeline (Raw Reads)</div>
+                <div class="text-caption" :class="workflow === 'reads' ? 'text-white' : 'text-grey-7'">FASTQ files &rarr; Trimming &rarr; Assembly &rarr; Annotation</div>
+              </div>
+            </div>
+          </q-card>
+          <q-card
+            class="my-card my-option cursor-pointer q-pa-md"
+            :class="[workflow === 'annotation' ? 'painted' : '']"
+            style="width: 48%"
+            @click="workflow = 'annotation'"
+          >
+            <div class="row items-center">
+              <q-icon name="find_in_page" size="2em" :color="workflow === 'annotation' ? 'white' : 'primary'" class="q-mr-md"/>
+              <div>
+                <div class="text-subtitle1 text-weight-bold" :class="workflow === 'annotation' ? 'text-white' : ''">Annotation Only</div>
+                <div class="text-caption" :class="workflow === 'annotation' ? 'text-white' : 'text-grey-7'">FASTA assembly &rarr; Choose annotation tools</div>
+              </div>
+            </div>
+          </q-card>
+        </div>
+      </div>
+
+      <!-- Step 2A: Full Pipeline - Platform & Files -->
+      <div v-if="workflow === 'reads'" class="items-center">
+        <div class="row full-width q-pb-lg no-wrap items-center">
+          <div class="num-square" style="backgroundColor: #FFBD08">2</div>
+          <div class="text-h6 text-weight-regular">Choose Platforms &amp; Files</div>
+        </div>
+        <div class="row justify-between full-width q-pb-lg" :class="$q.screen.width < 550 ? '' : 'q-gutter-x-md'">
           <q-card
             class="my-card q-mb-lg my-option"
             :class="[program.isChecked ? 'painted' : '']"
@@ -55,16 +86,11 @@
             </q-card-section>
           </q-card>
         </div>
-        <q-form
-          v-if="index == 1"
-          class="row justify-between full-width"
-          style="padding-bottom: 55px"
-          :class="$q.screen.width < 550 ? '' : 'q-gutter-x-md'"
-        >
+        <div class="row justify-between full-width q-pb-lg" :class="$q.screen.width < 550 ? '' : 'q-gutter-x-md'">
           <q-card
             class="my-file-card q-mb-lg my-option"
             v-for="(program, i) in programs"
-            :key="i + program"
+            :key="'file'+i"
             :style="{width: $q.screen.width < 550 ? '100%' : '30%'}"
           >
             <div class="column my-file-picker">
@@ -97,68 +123,79 @@
                 </div>
               </div>
               <q-file
-                q-file
                 v-model="program.files"
                 label="Choose files"
                 filled
                 multiple
                 clearable
-                text-center
                 :disable='!program.isChecked'
-                lazy-rules
                 class="q-pb-xs"
                 style="height: 55px"
-                :rules="[ val => val != null || 'Please enter file']"
               >
                 <template v-slot:prepend>
                   <q-icon name="cloud_upload" class="cloud-icon" @click.stop />
                 </template>
-                <template v-slot:append>
-                  <q-icon
-                    name="search"
-                    @click.stop="model = null"
-                    class="cursor-pointer"
-                  />
-                </template>
               </q-file>
             </div>
           </q-card>
-        </q-form>
+        </div>
       </div>
+
+      <!-- Step 2B: Annotation Only - Upload FASTA & Choose Tools -->
+      <div v-if="workflow === 'annotation'" class="items-center">
+        <div class="row full-width q-pb-lg no-wrap items-center">
+          <div class="num-square" style="backgroundColor: #FFBD08">2</div>
+          <div class="text-h6 text-weight-regular">Upload Assembled Genome (FASTA)</div>
+        </div>
+        <div class="row q-pb-lg">
+          <q-file
+            v-model="assemblyFile"
+            label="Select FASTA file (.fasta, .fa, .fna)"
+            filled
+            clearable
+            accept=".fasta,.fa,.fna,.fsa"
+            class="col-8"
+            style="height: 55px"
+          >
+            <template v-slot:prepend>
+              <q-icon name="cloud_upload" class="cloud-icon" @click.stop />
+            </template>
+          </q-file>
+        </div>
+
+        <div class="row full-width q-pb-lg no-wrap items-center">
+          <div class="num-square" style="backgroundColor: #4CAF50">3</div>
+          <div class="text-h6 text-weight-regular">Choose Annotation Tools</div>
+        </div>
+        <div class="row q-gutter-md q-pb-lg">
+          <q-card
+            v-for="(tool, i) in annotationTools"
+            :key="'tool'+i"
+            class="my-card q-pa-sm cursor-pointer"
+            :class="[tool.enabled ? 'painted' : '']"
+            style="min-width: 180px; width: 22%"
+            @click="tool.enabled = !tool.enabled"
+          >
+            <q-card-section class="row items-center no-wrap q-pa-sm">
+              <q-checkbox v-model="tool.enabled" :color="tool.enabled ? '' : 'white'" class="q-mr-xs"/>
+              <div>
+                <div class="text-subtitle2 text-weight-bold" :class="tool.enabled ? 'text-white' : ''">{{ tool.name }}</div>
+                <div class="text-caption" :class="tool.enabled ? 'text-white' : 'text-grey-7'">{{ tool.description }}</div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
+
+      <!-- Step 3: Sample Info & Submit -->
       <div class="full-width row full-height">
         <q-form
           ref="myform"
           class="q-gutter-y-md col-6"
         >
-          <div>
-            <div>Metadata File (Optional)</div>
-            <div class="row items-center">
-              <q-file
-                filled
-                clearable
-                v-model="info.metadata"
-                class="q-ma-none col-grow"
-                label="Metadata file: browser file"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="cloud_upload" class="cloud-icon" @click.stop />
-                </template>
-                <template v-slot:append>
-                  <q-icon
-                    name="search"
-                    @click.stop="model = null"
-                    class="cursor-pointer"
-                  />
-                </template>
-              </q-file>
-              <div class="q-pl-md">
-                <q-btn round color="blue" icon="download" size="md" @click="openURL('')">
-                  <q-tooltip>
-                    Download template format
-                  </q-tooltip>
-                </q-btn>
-              </div>
-            </div>
+          <div class="row full-width q-pb-sm no-wrap items-center">
+            <div class="num-square" :style="{backgroundColor: workflow === 'reads' ? '#4CAF50' : '#2196F3'}">{{ workflow === 'reads' ? 3 : 4 }}</div>
+            <div class="text-h6 text-weight-regular">Sample Information</div>
           </div>
           <div>
             <div>Sample Name</div>
@@ -168,9 +205,9 @@
               lazy-rules
               :rules="[ val => val && val.length > 0 || 'Please type something']"
             >
-            <template v-if="info.sampleName != null" v-slot:append>
-              <q-icon name="close" @click="info.sampleName = null" class="cursor-pointer" />
-            </template>
+              <template v-if="info.sampleName != null" v-slot:append>
+                <q-icon name="close" @click="info.sampleName = null" class="cursor-pointer" />
+              </template>
             </q-input>
           </div>
           <div class="row">
@@ -202,7 +239,7 @@
               />
             </div>
           </div>
-          <div class="row">
+          <div class="row" v-if="workflow === 'reads'">
             <div class="col-grow column">
               <div>Genome Size (for Nanopore assembly)</div>
               <q-input
@@ -218,7 +255,6 @@
               filled
               v-model="info.description"
               class="q-ma-none"
-              lazy-rules
             >
               <template v-if="info.description != null" v-slot:append>
                 <q-icon name="close" @click="info.description = null" class="cursor-pointer" />
@@ -285,6 +321,21 @@ const programs = [
   }
 ]
 
+const defaultAnnotationTools = [
+  { name: 'Prokka', key: 'prokka', enabled: true, description: 'Gene annotation' },
+  { name: 'MLST', key: 'mlst', enabled: true, description: 'Sequence typing' },
+  { name: 'Barrnap', key: 'barrnap', enabled: true, description: 'Ribosomal RNA' },
+  { name: 'Abricate', key: 'abricate', enabled: true, description: 'Resistance genes' },
+  { name: 'AMRFinderPlus', key: 'amrfinderplus', enabled: false, description: 'AMR detection (NCBI)' },
+  { name: 'PlasmidFinder', key: 'plasmidfinder', enabled: false, description: 'Plasmid replicons' },
+  { name: 'MOB-suite', key: 'mobsuite', enabled: false, description: 'Plasmid typing' },
+  { name: 'Phigaro', key: 'phigaro', enabled: false, description: 'Phage detection' },
+  { name: 'CRISPRCasFinder', key: 'crisprcasfinder', enabled: false, description: 'CRISPR arrays' },
+  { name: 'tRNAscan-SE', key: 'trnascan', enabled: false, description: 'tRNA prediction' },
+  { name: 'Kleborate', key: 'kleborate', enabled: false, description: 'Klebsiella typing' },
+  { name: 'KOFAM', key: 'kofam', enabled: false, description: 'KEGG annotation' }
+]
+
 const genusItems = [
   'Acinetobacter', 'Bacillus', 'Burkholderia', 'Campylobacter', 'Clostridioides',
   'Clostridium', 'Corynebacterium', 'Enterobacter', 'Enterococcus', 'Escherichia',
@@ -299,31 +350,21 @@ const speciesItems = [
   'monocytogenes', 'pneumoniae', 'pyogenes', 'tuberculosis', 'typhimurium'
 ]
 
-const options = [
-  {
-    title: 'Choose Sequence Platforms',
-    color: '#FF3116'
-  },
-  {
-    title: 'Choose Files',
-    color: '#FFBD08'
-  }
-]
-
 import { scroll, openURL } from 'quasar'
 const { getScrollTarget, setScrollPosition } = scroll
 
 export default {
   data () {
     return {
-      options,
+      workflow: 'annotation',
       programs,
+      assemblyFile: null,
+      annotationTools: defaultAnnotationTools.map(t => ({ ...t })),
       files: null,
       info: {
-        metadata: null,
         sampleName: 'My_Sample1',
-        genus: genusItems[12], // Klebsiella
-        species: speciesItems[11], // pneumoniae
+        genus: genusItems[9], // Escherichia
+        species: speciesItems[5], // coli
         genomeSize: '5m',
         description: null
       },
@@ -367,24 +408,14 @@ export default {
         this.filteredSpeciesOptions = speciesItems.filter(v => v.toLowerCase().indexOf(needle) > -1)
       })
     },
-    checkBox (index) {
-      this.programs[index].isChecked = !this.programs[index].isChecked
-    },
-    getResults () {
-      var files = [null, null, null]
-      for (let index = 0; index < this.programs.length; index++) {
-        if (this.programs[index].files !== null) {
-          files[index] = this.programs[index].files
-        }
-      }
-      return files
-    },
     restart () {
+      this.workflow = 'annotation'
+      this.assemblyFile = null
+      this.annotationTools = defaultAnnotationTools.map(t => ({ ...t }))
       this.info = {
-        metadata: null,
         sampleName: 'My_Sample1',
-        genus: genusItems[12],
-        species: speciesItems[11],
+        genus: genusItems[9],
+        species: speciesItems[5],
         genomeSize: '5m',
         description: null
       }
@@ -396,50 +427,58 @@ export default {
       this.$store.commit('pipa/resetPipeline')
     },
     async onSubmit () {
-      const fileData = {
-        illumina: this.programs[0].files,
-        nanopore: this.programs[1].files,
-        pacbio: this.programs[2].files
-      }
-      const hasFiles = fileData.illumina || fileData.nanopore || fileData.pacbio
-
       const success = await this.$refs.myform.validate()
       if (!success) return
 
-      if (!hasFiles) {
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'warning',
-          message: 'Please choose at least one sequence platform'
-        })
-        return
+      if (this.workflow === 'reads') {
+        const hasFiles = this.programs[0].files || this.programs[1].files || this.programs[2].files
+        if (!hasFiles) {
+          this.$q.notify({ color: 'red-5', textColor: 'white', icon: 'warning', message: 'Please choose at least one platform and upload files' })
+          return
+        }
+      } else {
+        if (!this.assemblyFile) {
+          this.$q.notify({ color: 'red-5', textColor: 'white', icon: 'warning', message: 'Please select a FASTA file' })
+          return
+        }
+        const enabledTools = this.annotationTools.filter(t => t.enabled)
+        if (enabledTools.length === 0) {
+          this.$q.notify({ color: 'red-5', textColor: 'white', icon: 'warning', message: 'Please select at least one annotation tool' })
+          return
+        }
       }
 
       this.submitting = true
       try {
         // Step 1: Upload files
-        await this.$store.dispatch('pipa/uploadFiles', {
-          files: fileData,
-          illuminaType: this.type_illumina
-        })
+        if (this.workflow === 'reads') {
+          await this.$store.dispatch('pipa/uploadFiles', {
+            files: {
+              illumina: this.programs[0].files,
+              nanopore: this.programs[1].files,
+              pacbio: this.programs[2].files
+            },
+            illuminaType: this.type_illumina
+          })
+        } else {
+          await this.$store.dispatch('pipa/uploadFiles', {
+            files: { illumina: [this.assemblyFile] },
+            illuminaType: 0
+          })
+        }
 
         // Step 2: Start pipeline
+        const enabledToolKeys = this.annotationTools.filter(t => t.enabled).map(t => t.key)
         await this.$store.dispatch('pipa/startPipeline', {
           genus: this.info.genus,
           species: this.info.species,
           sampleName: this.info.sampleName,
-          genomeSize: this.info.genomeSize
+          genomeSize: this.info.genomeSize,
+          inputType: this.workflow === 'annotation' ? 'assembly' : 'reads',
+          tools: enabledToolKeys
         })
 
-        this.$q.notify({
-          color: 'green-5',
-          textColor: 'white',
-          icon: 'check',
-          message: 'Pipeline started successfully!'
-        })
-
-        // Navigate to Results page
+        this.$q.notify({ color: 'green-5', textColor: 'white', icon: 'check', message: 'Pipeline started successfully!' })
         this.currentPage = 2
       } catch (error) {
         console.error('Submission failed:', error)
@@ -479,13 +518,7 @@ export default {
     align-items: center;
   }
   .option-card-title{
-    color: $primary;
     font-weight: 600;
-    color: black;
-  }
-  .option-card-subtitle{
-    color: $primary;
-    font-weight: 500;
     color: black;
   }
   .option-card-subtitle-painted, .option-card-title-painted{
@@ -495,7 +528,7 @@ export default {
     background-color: #F2F2F2;
   }
   .my-option{
-    min-width: 225px;
+    min-width: 180px;
   }
   .my-button{
     height: 50px;
@@ -503,21 +536,12 @@ export default {
     color: white;
     width: 30%;
   }
-  .make-hidden{
-    visibility: hidden;
-  }
-  .make-visible{
-    visibility: visible;
-  }
   .painted{
     border-color: $accent;
     background-color: $accent;
   }
   .my-card-section{
     padding: 0 16px 16px 16px;
-  }
-  .btn-program{
-    text-transform: none;
   }
   .q-file{
     background-color: white;
@@ -542,9 +566,5 @@ export default {
   .my-file-card, .filepicker-top{
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-  }
-  .btn-sp{
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.5);
   }
 </style>
