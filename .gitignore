@@ -130,3 +130,19 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Node
+node_modules/
+
+# Quasar
+UI/DesktopPIPA/.quasar/
+UI/DesktopPIPA/dist/
+
+# Tauri
+UI/DesktopPIPA/src-tauri/target/
+
+# Pipeline data (generated at runtime)
+back-end/data/jobs/
+
+# MkDocs
+site/
