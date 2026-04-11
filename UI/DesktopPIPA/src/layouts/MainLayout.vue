@@ -37,7 +37,7 @@
       </q-scroll-area>
     </q-drawer>
     <q-footer v-if="currentPage === 0" class="bg-primary text-black column justify-center items-center" style="height: 40px">
-      <div>Copyright 2021-2026 Louise Cerdeira</div>
+      <div>Copyright 2026</div>
     </q-footer>
     <q-page-container>
       <router-view :model="currentPage"/>
