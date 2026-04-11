@@ -37,7 +37,7 @@
       </q-scroll-area>
     </q-drawer>
     <q-footer v-if="currentPage === 0" class="bg-primary text-black column justify-center items-center" style="height: 40px">
-      <div>Copyright - 2021-2026</div>
+      <div>Copyright 2021-2026 Louise Cerdeira</div>
     </q-footer>
     <q-page-container>
       <router-view :model="currentPage"/>
@@ -56,7 +56,7 @@ const menuList = [
   {
     icon: 'ion-book',
     label: 'Documentation',
-    link: 'https://pipa.readthedocs.io'
+    link: 'https://pipa-tool.readthedocs.io/en/latest/'
   }
 ]
 
