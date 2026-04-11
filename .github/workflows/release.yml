@@ -15,7 +15,7 @@ jobs:
           - platform: macos-latest
             target: aarch64-apple-darwin
             label: macOS-ARM64
-          - platform: macos-13
+          - platform: macos-latest
             target: x86_64-apple-darwin
             label: macOS-Intel
           - platform: ubuntu-22.04
@@ -48,41 +48,21 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: Install frontend dependencies
-        run: |
-          cd UI/DesktopPIPA
-          yarn install
+        working-directory: UI/DesktopPIPA
+        run: yarn install
+
+      - name: Install Quasar CLI
+        run: npm install -g @quasar/cli
 
       - name: Build SPA
-        run: |
-          cd UI/DesktopPIPA
-          npx quasar build
+        working-directory: UI/DesktopPIPA
+        run: quasar build
 
       - name: Build Tauri app
-        uses: tauri-apps/tauri-action@v0
+        working-directory: UI/DesktopPIPA
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          projectPath: UI/DesktopPIPA
-          tagName: ${{ github.ref_name }}
-          releaseName: 'PIPA ${{ github.ref_name }}'
-          releaseBody: |
-            PIPA Desktop - Pipeline for Microbial Genomic Analysis
-
-            ## Installation
-            1. Download the installer for your platform below
-            2. Install and launch PIPA
-            3. The app will start a local Flask backend automatically
-            4. **Note**: You need Python 3 and the bioinformatics tools installed separately (see documentation)
-
-            For the full pipeline with all tools pre-installed, use Docker:
-            ```
-            docker-compose up -d
-            ```
-
-            [Full Documentation](https://pipa.readthedocs.io)
-          releaseDraft: true
-          prerelease: false
-          args: --target ${{ matrix.target }}
+        run: npx @tauri-apps/cli build --target ${{ matrix.target }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -90,8 +70,56 @@ jobs:
           name: pipa-${{ matrix.label }}
           path: |
             UI/DesktopPIPA/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.dmg
-            UI/DesktopPIPA/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.app
             UI/DesktopPIPA/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
             UI/DesktopPIPA/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage
             UI/DesktopPIPA/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.msi
             UI/DesktopPIPA/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
+            UI/DesktopPIPA/src-tauri/target/${{ matrix.target }}/release/bundle/**/*.nsis
+
+  create-release:
+    needs: build-tauri
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List artifacts
+        run: find artifacts -type f | head -30
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: 'PIPA ${{ github.ref_name }}'
+          draft: true
+          body: |
+            ## PIPA Desktop - Pipeline for Microbial Genomic Analysis
+
+            Download the installer for your platform:
+
+            | Platform | File | Architecture |
+            |----------|------|--------------|
+            | **macOS (Apple Silicon)** | `.dmg` | M1, M2, M3, M4 |
+            | **macOS (Intel)** | `.dmg` | Intel Macs |
+            | **Windows** | `.msi` or `.exe` | 64-bit Windows 10/11 |
+            | **Linux (Debian/Ubuntu)** | `.deb` | Debian-based |
+            | **Linux (Universal)** | `.AppImage` | Any 64-bit Linux |
+
+            ### Prerequisites
+            The desktop app provides the UI. You also need the bioinformatics tools:
+            - **Recommended**: Use Docker (`docker-compose up -d`) for all tools pre-installed
+            - **Alternative**: Install via Conda (`conda env create -f environment.yml`)
+
+            [Full Documentation](https://pipa.readthedocs.io)
+          files: |
+            artifacts/**/*.dmg
+            artifacts/**/*.deb
+            artifacts/**/*.AppImage
+            artifacts/**/*.msi
+            artifacts/**/*.exe
