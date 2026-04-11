@@ -508,37 +508,55 @@ export default {
 
 <style lang="scss">
   .num-square{
-    height: 25px;
-    width: 25px;
-    margin-right: 10px;
-    color: $font;
-    font-size: 20px;
+    height: 30px;
+    width: 30px;
+    margin-right: 12px;
+    color: white;
+    font-size: 16px;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 8px;
+    font-weight: 700;
   }
   .option-card-title{
     font-weight: 600;
-    color: black;
+    color: #0D1B2A;
   }
   .option-card-subtitle-painted, .option-card-title-painted{
     color: white;
   }
   .my-card{
-    background-color: #F2F2F2;
+    background-color: #f8f9fa;
+    border-radius: 14px;
+    border: 1px solid #e8e8e8;
+    transition: all 0.3s ease;
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(13, 27, 42, 0.08);
+    }
   }
   .my-option{
     min-width: 180px;
   }
   .my-button{
     height: 50px;
-    background-color: $terciary;
+    background: linear-gradient(135deg, #00B4D8, #52B788) !important;
     color: white;
-    width: 30%;
+    border-radius: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
+    transition: all 0.3s ease;
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 180, 216, 0.4);
+    }
   }
   .painted{
-    border-color: $accent;
-    background-color: $accent;
+    border-color: #52B788;
+    background: linear-gradient(135deg, #1B4332, #2D6A4F);
+    box-shadow: 0 4px 15px rgba(82, 183, 136, 0.3);
   }
   .my-card-section{
     padding: 0 16px 16px 16px;
@@ -554,10 +572,11 @@ export default {
     justify-content: center;
   }
   .cloud-icon{
-    color: #616161;
+    color: #415A77;
   }
   .filepicker-top{
-    background-color: #616161;
+    background: linear-gradient(135deg, #0D1B2A, #1B4332);
+    border-radius: 14px 14px 0 0;
   }
   .my-border{
     border-radius: 50%;

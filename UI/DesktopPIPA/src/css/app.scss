@@ -1,10 +1,164 @@
-// app global css in SCSS form
+// PIPA Global Styles
 @font-face {
-font-family: SourceSansPro;
-src: url(./fonts/SourceSansPro-Regular.ttf);
+  font-family: SourceSansPro;
+  src: url(./fonts/SourceSansPro-Regular.ttf);
 }
 
-// declare a class which applies it
-.my-font {
-font-family: 'SourceSansPro';
+@font-face {
+  font-family: SourceSansProBold;
+  src: url(./fonts/SourceSansPro-Bold.ttf);
+}
+
+@font-face {
+  font-family: SourceSansProLight;
+  src: url(./fonts/SourceSansPro-Light.ttf);
+}
+
+body {
+  font-family: 'SourceSansPro', 'Roboto', sans-serif;
+  background-color: #f8f9fa;
+}
+
+// Gradient backgrounds
+.gradient-hero {
+  background: linear-gradient(135deg, #0D1B2A 0%, #1B4332 50%, #2D6A4F 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, #00B4D8 0%, #52B788 100%);
+}
+
+.gradient-dark {
+  background: linear-gradient(180deg, #0D1B2A 0%, #1B2838 100%);
+}
+
+// Glass effect cards
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(82, 183, 136, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Feature cards
+.feature-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  border: 1px solid #e8e8e8;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(13, 27, 42, 0.12);
+    border-color: #52B788;
+  }
+}
+
+// Glowing button
+.glow-btn {
+  background: linear-gradient(135deg, #00B4D8, #52B788) !important;
+  color: white !important;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 180, 216, 0.5);
+  }
+}
+
+// Pipeline step indicator
+.pipeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  .step-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    z-index: 1;
+    transition: all 0.3s ease;
+  }
+
+  .step-active {
+    background: linear-gradient(135deg, #00B4D8, #52B788);
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 180, 216, 0.4);
+  }
+
+  .step-completed {
+    background: #52B788;
+    color: white;
+  }
+
+  .step-pending {
+    background: #e0e1dd;
+    color: #415A77;
+  }
+
+  .step-failed {
+    background: #E63946;
+    color: white;
+  }
+}
+
+// Smooth transitions
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+// Animated counter
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation: countUp 0.6s ease forwards;
+}
+
+// Drag & drop zone
+.drop-zone {
+  border: 2px dashed rgba(82, 183, 136, 0.4);
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  transition: all 0.3s ease;
+  background: rgba(82, 183, 136, 0.04);
+  cursor: pointer;
+
+  &:hover, &.drag-over {
+    border-color: #52B788;
+    background: rgba(82, 183, 136, 0.1);
+  }
+
+  &.drag-over {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(82, 183, 136, 0.2);
+  }
 }

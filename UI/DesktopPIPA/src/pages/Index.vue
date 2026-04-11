@@ -1,8 +1,10 @@
 <template>
-  <q-page class="flex column">
-    <about v-if="currentPage == 0"/>
-    <software v-if="currentPage == 1"/>
-    <results v-if="currentPage == 2"/>
+  <q-page>
+    <transition name="page-fade" mode="out-in">
+      <about v-if="currentPage == 0" key="about"/>
+      <software v-else-if="currentPage == 1" key="software"/>
+      <results v-else-if="currentPage == 2" key="results"/>
+    </transition>
   </q-page>
 </template>
 
@@ -23,3 +25,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.page-fade-enter-active, .page-fade-leave-active {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.page-fade-enter, .page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(12px);
+}
+</style>
