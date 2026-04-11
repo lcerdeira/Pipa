@@ -119,7 +119,7 @@ jobs:
             - **Recommended**: Use Docker (`docker-compose up -d`) for all tools pre-installed
             - **Alternative**: Install via Conda (`conda env create -f environment.yml`)
 
-            [Full Documentation](https://pipa.readthedocs.io)
+            [Full Documentation](https://pipa-tool.readthedocs.io/en/latest/)
           files: |
             artifacts/**/*.dmg
             artifacts/**/*.deb
