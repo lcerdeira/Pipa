@@ -49,7 +49,7 @@
       ],
       "identifier": "io.github.lcerdeira.pipa",
       "targets": "all",
-      "category": "Science",
+      "category": "public.app-category.education",
       "shortDescription": "Pipeline for Microbial Genomic Analysis",
       "longDescription": "PIPA is an integrated platform for microbial genomic analysis supporting Illumina, Nanopore, and PacBio sequencing data.",
       "macOS": {
