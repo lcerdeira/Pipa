@@ -10,7 +10,7 @@
 
 PIPA is an integrated platform for microbial genomic analysis that supports Illumina, Nanopore, and PacBio sequencing data. It provides a web interface with a Flask backend that orchestrates bioinformatics tools for read trimming, genome assembly, gene prediction, and reporting.
 
-**[Full Documentation](https://pipa.readthedocs.io)**
+**[Full Documentation]([https://pipa.readthedocs.io](https://pipa-tool.readthedocs.io/en/latest/))**
 
 ## Pipeline Stages
 
