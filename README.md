@@ -7,6 +7,7 @@
 ![License](https://img.shields.io/badge/license-GPLv3-blue)
 ![Last Commit](https://img.shields.io/github/last-commit/lcerdeira/pipa)
 [![Documentation](https://readthedocs.org/projects/pipa-tool/badge/?version=latest)](https://pipa-tool.readthedocs.io/en/latest/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19521044.svg)](https://doi.org/10.5281/zenodo.19521044)
 
 PIPA is an integrated platform for microbial genomic analysis that supports Illumina, Nanopore, and PacBio sequencing data. It provides a web interface and desktop application with a Flask backend that orchestrates bioinformatics tools for read trimming, genome assembly, gene prediction, and reporting.
 
@@ -165,3 +166,5 @@ Copyright 2021-2026 Louise Cerdeira. GPL-3.0.
 If you use PIPA in your research, please cite:
 
 > Cerdeira, L. PIPA: Pipeline for Microbial Genomic Analysis. https://github.com/lcerdeira/Pipa
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19521044.svg)](https://doi.org/10.5281/zenodo.19521044)

@@ -5,6 +5,10 @@ If you use PIPA in your research, please cite:
 > Cerdeira, L. PIPA: Pipeline for Microbial Genomic Analysis.
 > https://github.com/lcerdeira/Pipa
 
+**DOI:** [10.5281/zenodo.19521044](https://doi.org/10.5281/zenodo.19521044)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19521044.svg)](https://doi.org/10.5281/zenodo.19521044)
+
 ## Tool Citations
 
 Please also cite the individual tools you use:

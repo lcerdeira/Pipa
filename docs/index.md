@@ -6,6 +6,9 @@
 
 PIPA is an integrated platform for microbial genomic analysis that supports Illumina, Nanopore, and PacBio sequencing data. It provides a web interface with a Flask backend that orchestrates bioinformatics tools for read trimming, genome assembly, gene prediction, and reporting.
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19521044.svg)](https://doi.org/10.5281/zenodo.19521044)
+[![GitHub](https://img.shields.io/github/stars/lcerdeira/Pipa?style=social)](https://github.com/lcerdeira/Pipa)
+
 ## Pipeline Overview
 
 ```

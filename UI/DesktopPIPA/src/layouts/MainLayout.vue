@@ -36,8 +36,8 @@
         </div>
       </q-scroll-area>
     </q-drawer>
-    <q-footer v-if="currentPage === 0" class="bg-primary text-black column justify-center items-center" style="height: 40px">
-      <div>Copyright 2026</div>
+    <q-footer v-if="currentPage === 0" class="bg-primary text-black column justify-center items-center" style="height: 50px">
+      <div>Copyright 2026 | DOI: <a href="https://doi.org/10.5281/zenodo.19521044" target="_blank" style="color: black; text-decoration: underline">10.5281/zenodo.19521044</a></div>
     </q-footer>
     <q-page-container>
       <router-view :model="currentPage"/>
