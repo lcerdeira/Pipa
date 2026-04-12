@@ -44,11 +44,9 @@ dependencies:
   - phispy
   - ismapper
 
-  # Organism-Specific Typing
+  # Organism-Specific Typing (conda-compatible)
   - kleborate
   - staphopia-sccmec
-  # tb-profiler removed: pathogen-profiler dependency conflict
-  # Install separately: conda create -n tbprofiler tb-profiler
   - ectyper
   - emmtyper
   - genotyphi
@@ -62,10 +60,6 @@ dependencies:
   - pbptyper
   - sccmec
   - seqsero2
-  # seroba removed: ariba dependency missing from channels
-  # shigatyper removed: samtools version conflict
-  # shigeifinder removed: samtools version conflict
-  # ssuissero removed: medaka 1.0.1 missing from channels
   - sistr_cmd
   - spatyper
   - stecfinder
@@ -74,9 +68,15 @@ dependencies:
   - samtools
   - bcftools
 
-  # pip-only tools
+  # pip installs (tools with conda conflicts, installed from GitHub/PyPI)
   - pip:
     - defense-finder-cli
     - mcroni
     - shigapass
     - clermontyping
+    - git+https://github.com/rrwick/Unicycler.git
+    - git+https://github.com/jodyphelan/TBProfiler.git
+    - git+https://github.com/sanger-pathogens/seroba.git
+    - git+https://github.com/CFSAN-Biostatistics/shigatyper.git
+    - git+https://github.com/LanLab/ShigEiFinder.git
+    - git+https://github.com/jimmyliu1326/SsuisSero.git
