@@ -1,5 +1,54 @@
 <template>
   <q-layout view="lHh Lpr lFf">
+    <!-- Backend loading overlay -->
+    <q-dialog v-model="showLoading" persistent seamless position="standard">
+      <q-card class="text-center q-pa-xl" style="min-width: 400px; border-radius: 16px">
+        <div class="q-mb-lg">
+          <q-img src="~assets/PipaLogo.jpeg" width="100px" style="border-radius: 12px"/>
+        </div>
+        <div class="text-h5 text-weight-bold q-mb-md">PIPA</div>
+
+        <div v-if="backendStatus === 'checking-docker'">
+          <q-spinner-gears size="40px" color="primary" class="q-mb-md"/>
+          <div class="text-body1">Checking Docker...</div>
+        </div>
+
+        <div v-else-if="backendStatus === 'pulling'">
+          <q-spinner-dots size="40px" color="info" class="q-mb-md"/>
+          <div class="text-body1 q-mb-sm">Downloading analysis tools</div>
+          <div class="text-caption text-grey-7 q-mb-md">First launch only (~3 GB)</div>
+          <div class="text-caption text-grey-6" style="max-width:350px; word-break:break-all">{{ pullMessage }}</div>
+        </div>
+
+        <div v-else-if="backendStatus === 'starting-docker' || backendStatus === 'starting-local'">
+          <q-spinner-gears size="40px" color="positive" class="q-mb-md"/>
+          <div class="text-body1">Starting backend...</div>
+        </div>
+
+        <div v-else-if="backendStatus === 'waiting'">
+          <q-spinner-hourglass size="40px" color="warning" class="q-mb-md"/>
+          <div class="text-body1">Waiting for backend to respond...</div>
+        </div>
+
+        <div v-else-if="backendStatus === 'failed'">
+          <q-icon name="error_outline" size="40px" color="negative" class="q-mb-md"/>
+          <div class="text-body1 text-negative q-mb-sm">Backend not available</div>
+          <div class="text-caption text-grey-7 q-mb-md">
+            Install <a href="https://www.docker.com/products/docker-desktop/" target="_blank">Docker Desktop</a>
+            and restart PIPA.
+          </div>
+          <q-btn flat label="Continue without backend" color="grey" no-caps @click="showLoading = false"/>
+        </div>
+
+        <div v-else-if="backendStatus === 'pull-failed'">
+          <q-icon name="cloud_off" size="40px" color="negative" class="q-mb-md"/>
+          <div class="text-body1 text-negative q-mb-sm">Failed to download tools</div>
+          <div class="text-caption text-grey-7 q-mb-md">Check your internet connection and try again.</div>
+          <q-btn flat label="Continue anyway" color="grey" no-caps @click="showLoading = false"/>
+        </div>
+      </q-card>
+    </q-dialog>
+
     <q-drawer
       v-model="drawer"
       show-if-above
@@ -44,6 +93,13 @@
             </q-item>
           </q-list>
           <q-space/>
+          <!-- Backend mode indicator -->
+          <div class="q-pa-sm q-mx-sm q-mb-xs" style="border-radius: 8px; background: rgba(255,255,255,0.04)">
+            <div class="row items-center justify-center">
+              <q-icon :name="backendIcon" :color="backendColor" size="14px" class="q-mr-xs"/>
+              <span style="color: rgba(224,225,221,0.4); font-size: 11px">{{ backendLabel }}</span>
+            </div>
+          </div>
           <div class="q-pa-md text-center" style="color: rgba(224,225,221,0.3); font-size: 11px">
             v2.0.0
           </div>
@@ -86,7 +142,11 @@ export default {
   data () {
     return {
       menuList,
-      drawer: false
+      drawer: false,
+      backendStatus: 'checking-docker',
+      backendMode: 'none',
+      pullMessage: '',
+      showLoading: false
     }
   },
   computed: {
@@ -94,6 +154,21 @@ export default {
       get () {
         return this.$store.state.pipa.currentPage
       }
+    },
+    backendIcon () {
+      if (this.backendMode === 'docker') return 'cloud_done'
+      if (this.backendMode === 'local') return 'computer'
+      return 'cloud_off'
+    },
+    backendColor () {
+      if (this.backendMode === 'docker') return 'positive'
+      if (this.backendMode === 'local') return 'info'
+      return 'grey-6'
+    },
+    backendLabel () {
+      if (this.backendMode === 'docker') return 'Docker backend'
+      if (this.backendMode === 'local') return 'Local backend'
+      return 'No backend'
     }
   },
   methods: {
@@ -103,6 +178,40 @@ export default {
       } else {
         window.open(url, '_blank')
       }
+    },
+    setupTauriListeners () {
+      if (!window.__TAURI__) return
+
+      const { listen } = window.__TAURI__.event
+
+      listen('backend-status', (event) => {
+        console.log('[PIPA] Backend status:', event.payload)
+        this.backendStatus = event.payload
+
+        if (event.payload === 'ready') {
+          this.showLoading = false
+          // Get the backend mode
+          window.__TAURI__.invoke('get_backend_mode').then(mode => {
+            this.backendMode = mode
+          })
+        } else if (event.payload === 'failed' || event.payload === 'pull-failed') {
+          // Keep dialog open to show error
+        }
+      })
+
+      listen('pull-progress', (event) => {
+        this.pullMessage = event.payload
+      })
+    }
+  },
+  mounted () {
+    if (window.__TAURI__) {
+      this.showLoading = true
+      this.setupTauriListeners()
+    } else {
+      // Web SPA mode - no Docker needed, direct connection
+      this.backendMode = 'local'
+      this.backendStatus = 'ready'
     }
   }
 }
