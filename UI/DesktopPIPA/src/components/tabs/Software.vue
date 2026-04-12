@@ -444,7 +444,7 @@ const toolCategories = [
   }
 ]
 
-import taxonomy from '../data/taxonomy.json'
+import taxonomy from '../../data/taxonomy.json'
 const genusItems = taxonomy.genera
 const speciesItems = taxonomy.species
 
