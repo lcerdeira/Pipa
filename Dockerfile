@@ -49,7 +49,10 @@ RUN micromamba run -n base amrfinder --update || true
 COPY --chown=$MAMBA_USER:$MAMBA_USER back-end/ /app/
 
 WORKDIR /app
-RUN mkdir -p /data
+
+USER root
+RUN mkdir -p /data && chown $MAMBA_USER:$MAMBA_USER /data
+USER $MAMBA_USER
 
 ENV PIPA_DATA_DIR=/data
 ENV FLASK_APP=app.py
