@@ -355,7 +355,10 @@ const programs = [
 
 const toolCategories = [
   {
-    id: 'general_annotation', label: 'General Annotation', icon: 'description', color: '#52B788',
+    id: 'general_annotation',
+    label: 'General Annotation',
+    icon: 'description',
+    color: '#52B788',
     tools: [
       { name: 'Prokka', key: 'prokka', enabled: true, description: 'Gene annotation' },
       { name: 'Bakta', key: 'bakta', enabled: false, description: 'Rapid bacterial annotation' },
@@ -367,7 +370,10 @@ const toolCategories = [
     ]
   },
   {
-    id: 'assembly_quality', label: 'Assembly Quality', icon: 'verified', color: '#00B4D8',
+    id: 'assembly_quality',
+    label: 'Assembly Quality',
+    icon: 'verified',
+    color: '#00B4D8',
     tools: [
       { name: 'BUSCO', key: 'busco', enabled: false, description: 'Assembly completeness' },
       { name: 'CheckM', key: 'checkm', enabled: false, description: 'Quality assessment' },
@@ -375,7 +381,10 @@ const toolCategories = [
     ]
   },
   {
-    id: 'resistance', label: 'Resistance & Virulence', icon: 'shield', color: '#E63946',
+    id: 'resistance',
+    label: 'Resistance & Virulence',
+    icon: 'shield',
+    color: '#E63946',
     tools: [
       { name: 'Abricate', key: 'abricate', enabled: true, description: 'Resistance genes' },
       { name: 'AMRFinderPlus', key: 'amrfinderplus', enabled: false, description: 'AMR detection (NCBI)' },
@@ -383,7 +392,10 @@ const toolCategories = [
     ]
   },
   {
-    id: 'mobile_elements', label: 'Mobile Elements & Defense', icon: 'swap_horiz', color: '#F4A261',
+    id: 'mobile_elements',
+    label: 'Mobile Elements & Defense',
+    icon: 'swap_horiz',
+    color: '#F4A261',
     tools: [
       { name: 'PlasmidFinder', key: 'plasmidfinder', enabled: false, description: 'Plasmid replicons' },
       { name: 'MOB-suite', key: 'mobsuite', enabled: false, description: 'Plasmid typing' },
@@ -395,7 +407,10 @@ const toolCategories = [
     ]
   },
   {
-    id: 'organism_typing', label: 'Organism-Specific Typing', icon: 'fingerprint', color: '#9C27B0',
+    id: 'organism_typing',
+    label: 'Organism-Specific Typing',
+    icon: 'fingerprint',
+    color: '#9C27B0',
     tools: [
       { name: 'Kleborate', key: 'kleborate', enabled: false, description: 'Klebsiella typing' },
       { name: 'staphtyper', key: 'staphtyper', enabled: false, description: 'S. aureus agr/spa/SCCmec' },
