@@ -17,7 +17,6 @@ dependencies:
   # Assembly
   - spades>=4.0
   - flye
-  - unicycler
   - canu
 
   # General Annotation
