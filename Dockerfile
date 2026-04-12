@@ -11,6 +11,9 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
 RUN micromamba install -y -n base -f /tmp/environment.yml && \
     micromamba clean --all --yes
 
+# Update AMRFinderPlus database
+RUN micromamba run -n base amrfinder --update || true
+
 # Copy backend code
 COPY --chown=$MAMBA_USER:$MAMBA_USER back-end/ /app/
 
@@ -25,5 +28,4 @@ ENV FLASK_ENV=production
 
 EXPOSE 5000
 
-# Run with micromamba activated
 CMD ["micromamba", "run", "-n", "base", "python", "-m", "flask", "run", "--host", "0.0.0.0", "--port", "5000"]

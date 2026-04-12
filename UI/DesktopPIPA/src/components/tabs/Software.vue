@@ -163,27 +163,59 @@
           </q-file>
         </div>
 
-        <div class="row full-width q-pb-lg no-wrap items-center">
+        <div class="row full-width q-pb-md no-wrap items-center">
           <div class="num-square" style="backgroundColor: #4CAF50">3</div>
           <div class="text-h6 text-weight-regular">Choose Annotation Tools</div>
+          <q-chip size="sm" class="q-ml-md" color="primary" text-color="white">
+            {{ totalEnabledTools }} selected
+          </q-chip>
         </div>
-        <div class="row q-gutter-md q-pb-lg">
-          <q-card
-            v-for="(tool, i) in annotationTools"
-            :key="'tool'+i"
-            class="my-card q-pa-sm cursor-pointer"
-            :class="[tool.enabled ? 'painted' : '']"
-            style="min-width: 180px; width: 22%"
-            @click="tool.enabled = !tool.enabled"
-          >
-            <q-card-section class="row items-center no-wrap q-pa-sm">
-              <q-checkbox v-model="tool.enabled" :color="tool.enabled ? '' : 'white'" class="q-mr-xs"/>
-              <div>
-                <div class="text-subtitle2 text-weight-bold" :class="tool.enabled ? 'text-white' : ''">{{ tool.name }}</div>
-                <div class="text-caption" :class="tool.enabled ? 'text-white' : 'text-grey-7'">{{ tool.description }}</div>
+        <div class="q-pb-lg">
+          <q-list bordered class="rounded-borders">
+            <q-expansion-item
+              v-for="category in toolCategoryData"
+              :key="category.id"
+              group="tools"
+              :default-opened="category.id === 'general_annotation'"
+              dense
+              header-class="text-weight-bold"
+            >
+              <template v-slot:header>
+                <q-item-section avatar>
+                  <q-icon :name="category.icon" :style="{ color: category.color }" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ category.label }}</q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <div class="row items-center q-gutter-x-sm">
+                    <q-chip dense size="sm" :color="enabledCount(category) > 0 ? 'positive' : 'grey-4'" :text-color="enabledCount(category) > 0 ? 'white' : 'grey-7'">
+                      {{ enabledCount(category) }}/{{ category.tools.length }}
+                    </q-chip>
+                    <q-btn flat dense size="sm" :label="allEnabled(category) ? 'None' : 'All'" no-caps @click.stop="toggleCategory(category)"/>
+                  </div>
+                </q-item-section>
+              </template>
+              <div class="row q-gutter-sm q-pa-md">
+                <q-card
+                  v-for="(tool, i) in category.tools"
+                  :key="'tool'+category.id+i"
+                  class="my-card q-pa-sm cursor-pointer"
+                  :class="[tool.enabled ? 'painted' : '']"
+                  style="min-width: 170px; width: 21%"
+                  @click="tool.enabled = !tool.enabled"
+                >
+                  <q-card-section class="row items-center no-wrap q-pa-sm">
+                    <q-checkbox v-model="tool.enabled" :color="tool.enabled ? '' : 'white'" class="q-mr-xs" dense/>
+                    <div>
+                      <div class="text-subtitle2 text-weight-bold" :class="tool.enabled ? 'text-white' : ''">{{ tool.name }}</div>
+                      <div class="text-caption" :class="tool.enabled ? 'text-white' : 'text-grey-7'" style="font-size: 11px">{{ tool.description }}</div>
+                    </div>
+                  </q-card-section>
+                </q-card>
               </div>
-            </q-card-section>
-          </q-card>
+            </q-expansion-item>
+          </q-list>
         </div>
       </div>
 
@@ -321,19 +353,79 @@ const programs = [
   }
 ]
 
-const defaultAnnotationTools = [
-  { name: 'Prokka', key: 'prokka', enabled: true, description: 'Gene annotation' },
-  { name: 'MLST', key: 'mlst', enabled: true, description: 'Sequence typing' },
-  { name: 'Barrnap', key: 'barrnap', enabled: true, description: 'Ribosomal RNA' },
-  { name: 'Abricate', key: 'abricate', enabled: true, description: 'Resistance genes' },
-  { name: 'AMRFinderPlus', key: 'amrfinderplus', enabled: false, description: 'AMR detection (NCBI)' },
-  { name: 'PlasmidFinder', key: 'plasmidfinder', enabled: false, description: 'Plasmid replicons' },
-  { name: 'MOB-suite', key: 'mobsuite', enabled: false, description: 'Plasmid typing' },
-  { name: 'Phigaro', key: 'phigaro', enabled: false, description: 'Phage detection' },
-  { name: 'CRISPRCasFinder', key: 'crisprcasfinder', enabled: false, description: 'CRISPR arrays' },
-  { name: 'tRNAscan-SE', key: 'trnascan', enabled: false, description: 'tRNA prediction' },
-  { name: 'Kleborate', key: 'kleborate', enabled: false, description: 'Klebsiella typing' },
-  { name: 'KOFAM', key: 'kofam', enabled: false, description: 'KEGG annotation' }
+const toolCategories = [
+  {
+    id: 'general_annotation', label: 'General Annotation', icon: 'description', color: '#52B788',
+    tools: [
+      { name: 'Prokka', key: 'prokka', enabled: true, description: 'Gene annotation' },
+      { name: 'Bakta', key: 'bakta', enabled: false, description: 'Rapid bacterial annotation' },
+      { name: 'MLST', key: 'mlst', enabled: true, description: 'Sequence typing' },
+      { name: 'Barrnap', key: 'barrnap', enabled: true, description: 'Ribosomal RNA' },
+      { name: 'tRNAscan-SE', key: 'trnascan', enabled: false, description: 'tRNA prediction' },
+      { name: 'EggNOG', key: 'eggnog', enabled: false, description: 'Functional annotation' },
+      { name: 'KOFAM', key: 'kofam', enabled: false, description: 'KEGG annotation' }
+    ]
+  },
+  {
+    id: 'assembly_quality', label: 'Assembly Quality', icon: 'verified', color: '#00B4D8',
+    tools: [
+      { name: 'BUSCO', key: 'busco', enabled: false, description: 'Assembly completeness' },
+      { name: 'CheckM', key: 'checkm', enabled: false, description: 'Quality assessment' },
+      { name: 'QUAST', key: 'quast', enabled: false, description: 'Contig quality' }
+    ]
+  },
+  {
+    id: 'resistance', label: 'Resistance & Virulence', icon: 'shield', color: '#E63946',
+    tools: [
+      { name: 'Abricate', key: 'abricate', enabled: true, description: 'Resistance genes' },
+      { name: 'AMRFinderPlus', key: 'amrfinderplus', enabled: false, description: 'AMR detection (NCBI)' },
+      { name: 'mcroni', key: 'mcroni', enabled: false, description: 'Colistin resistance (mcr-1)' }
+    ]
+  },
+  {
+    id: 'mobile_elements', label: 'Mobile Elements & Defense', icon: 'swap_horiz', color: '#F4A261',
+    tools: [
+      { name: 'PlasmidFinder', key: 'plasmidfinder', enabled: false, description: 'Plasmid replicons' },
+      { name: 'MOB-suite', key: 'mobsuite', enabled: false, description: 'Plasmid typing' },
+      { name: 'Phigaro', key: 'phigaro', enabled: false, description: 'Phage detection' },
+      { name: 'PhiSpy', key: 'phispy', enabled: false, description: 'Prophage prediction' },
+      { name: 'CRISPRCasFinder', key: 'crisprcasfinder', enabled: false, description: 'CRISPR arrays' },
+      { name: 'DefenseFinder', key: 'defensefinder', enabled: false, description: 'Anti-phage systems' },
+      { name: 'ISMapper', key: 'ismapper', enabled: false, description: 'Insertion sites' }
+    ]
+  },
+  {
+    id: 'organism_typing', label: 'Organism-Specific Typing', icon: 'fingerprint', color: '#9C27B0',
+    tools: [
+      { name: 'Kleborate', key: 'kleborate', enabled: false, description: 'Klebsiella typing' },
+      { name: 'staphtyper', key: 'staphtyper', enabled: false, description: 'S. aureus agr/spa/SCCmec' },
+      { name: 'TBProfiler', key: 'tbprofiler', enabled: false, description: 'M. tuberculosis resistance' },
+      { name: 'ClermonTyping', key: 'clermontyping', enabled: false, description: 'E. coli phylotyping' },
+      { name: 'ECTyper', key: 'ectyper', enabled: false, description: 'E. coli serotyping' },
+      { name: 'emmtyper', key: 'emmtyper', enabled: false, description: 'S. pyogenes emm-typing' },
+      { name: 'GenoTyphi', key: 'genotyphi', enabled: false, description: 'S. Typhi genotyping' },
+      { name: 'hicap', key: 'hicap', enabled: false, description: 'H. influenzae cap locus' },
+      { name: 'HpSuisSero', key: 'hpsuissero', enabled: false, description: 'H. parasuis serotyping' },
+      { name: 'legsta', key: 'legsta', enabled: false, description: 'L. pneumophila typing' },
+      { name: 'LisSero', key: 'lissero', enabled: false, description: 'L. monocytogenes serogroup' },
+      { name: 'meningotype', key: 'meningotype', enabled: false, description: 'N. meningitidis serotyping' },
+      { name: 'ngmaster', key: 'ngmaster', enabled: false, description: 'N. gonorrhoeae MAST' },
+      { name: 'pasty', key: 'pasty', enabled: false, description: 'P. aeruginosa serogrouping' },
+      { name: 'pbptyper', key: 'pbptyper', enabled: false, description: 'S. pneumoniae PBP typing' },
+      { name: 'PneumoCaT', key: 'pneumocat', enabled: false, description: 'S. pneumoniae capsular typing' },
+      { name: 'sccmec', key: 'sccmec', enabled: false, description: 'SCCmec cassette typing' },
+      { name: 'SeqSero2', key: 'seqsero2', enabled: false, description: 'Salmonella serotype prediction' },
+      { name: 'SeroBA', key: 'seroba', enabled: false, description: 'S. pneumoniae serotyping' },
+      { name: 'ShigaPass', key: 'shigapass', enabled: false, description: 'Shigella serotyping' },
+      { name: 'ShigaTyper', key: 'shigatyper', enabled: false, description: 'Shigella serotype' },
+      { name: 'ShigEiFinder', key: 'shigeifinder', enabled: false, description: 'Shigella/EIEC serotyping' },
+      { name: 'SISTR', key: 'sistr', enabled: false, description: 'Salmonella serovar prediction' },
+      { name: 'spaTyper', key: 'spatyper', enabled: false, description: 'S. aureus spa typing' },
+      { name: 'SsuisSero', key: 'ssuissero', enabled: false, description: 'S. suis serotyping' },
+      { name: 'staphopia-sccmec', key: 'staphopiasccmec', enabled: false, description: 'S. aureus SCCmec' },
+      { name: 'STECFinder', key: 'stecfinder', enabled: false, description: 'STEC serotyping' }
+    ]
+  }
 ]
 
 const genusItems = [
@@ -359,7 +451,7 @@ export default {
       workflow: 'annotation',
       programs,
       assemblyFile: null,
-      annotationTools: defaultAnnotationTools.map(t => ({ ...t })),
+      toolCategoryData: toolCategories.map(c => ({ ...c, tools: c.tools.map(t => ({ ...t })) })),
       files: null,
       info: {
         sampleName: 'My_Sample1',
@@ -392,9 +484,22 @@ export default {
     },
     previousJobs () {
       return this.$store.state.pipa.previousJobs
+    },
+    totalEnabledTools () {
+      return this.toolCategoryData.flatMap(c => c.tools).filter(t => t.enabled).length
     }
   },
   methods: {
+    enabledCount (category) {
+      return category.tools.filter(t => t.enabled).length
+    },
+    allEnabled (category) {
+      return category.tools.every(t => t.enabled)
+    },
+    toggleCategory (category) {
+      const allOn = this.allEnabled(category)
+      category.tools.forEach(t => { t.enabled = !allOn })
+    },
     openURL,
     filterGenus (val, update) {
       update(() => {
@@ -411,7 +516,7 @@ export default {
     restart () {
       this.workflow = 'annotation'
       this.assemblyFile = null
-      this.annotationTools = defaultAnnotationTools.map(t => ({ ...t }))
+      this.toolCategoryData = toolCategories.map(c => ({ ...c, tools: c.tools.map(t => ({ ...t })) }))
       this.info = {
         sampleName: 'My_Sample1',
         genus: genusItems[9],
@@ -441,7 +546,8 @@ export default {
           this.$q.notify({ color: 'red-5', textColor: 'white', icon: 'warning', message: 'Please select a FASTA file' })
           return
         }
-        const enabledTools = this.annotationTools.filter(t => t.enabled)
+        const allTools = this.toolCategoryData.flatMap(c => c.tools)
+        const enabledTools = allTools.filter(t => t.enabled)
         if (enabledTools.length === 0) {
           this.$q.notify({ color: 'red-5', textColor: 'white', icon: 'warning', message: 'Please select at least one annotation tool' })
           return
@@ -468,7 +574,7 @@ export default {
         }
 
         // Step 2: Start pipeline
-        const enabledToolKeys = this.annotationTools.filter(t => t.enabled).map(t => t.key)
+        const enabledToolKeys = this.toolCategoryData.flatMap(c => c.tools).filter(t => t.enabled).map(t => t.key)
         await this.$store.dispatch('pipa/startPipeline', {
           genus: this.info.genus,
           species: this.info.species,
