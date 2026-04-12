@@ -174,7 +174,7 @@ Dr Louise Cerdeira - Louise.Cerdeira@gmail.com
 
 ## License
 
-Copyright 2021-2026 Louise Cerdeira. GPL-3.0.
+Copyright 2026. GPL-3.0.
 
 ## Citation
 
