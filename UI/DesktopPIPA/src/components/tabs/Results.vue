@@ -312,12 +312,20 @@ export default {
       link.click()
     },
     async initResults () {
+      console.log('[Results] initResults, jobId:', this.$store.state.pipa.jobId, 'status:', this.$store.state.pipa.pipelineStatus)
       // Always poll once to get the latest status
       const data = await this.$store.dispatch('pipa/pollStatus')
+      console.log('[Results] pollStatus returned:', data)
       if (data && (data.status === 'completed' || data.status === 'completed_with_errors')) {
+        console.log('[Results] Pipeline completed, fetching results')
         await this.$store.dispatch('pipa/fetchResults')
+        console.log('[Results] Results fetched, status:', this.$store.state.pipa.pipelineStatus)
       } else if (data && data.status === 'running') {
+        console.log('[Results] Pipeline running, starting polling')
         this.startPolling()
+      } else {
+        console.log('[Results] No data or unknown status, trying poll in 1s')
+        setTimeout(() => this.initResults(), 1000)
       }
     },
     startPolling () {
