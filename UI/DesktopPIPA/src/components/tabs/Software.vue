@@ -386,7 +386,8 @@ const toolCategories = [
     icon: 'shield',
     color: '#E63946',
     tools: [
-      { name: 'Abricate', key: 'abricate', enabled: true, description: 'Resistance genes' },
+      { name: 'Abricate', key: 'abricate', enabled: true, description: 'Resistance genes (NCBI)' },
+      { name: 'Abricate VFDB', key: 'abricate_vfdb', enabled: false, description: 'Virulence factors (VFDB)' },
       { name: 'AMRFinderPlus', key: 'amrfinderplus', enabled: false, description: 'AMR detection (NCBI)' },
       { name: 'mcroni', key: 'mcroni', enabled: false, description: 'Colistin resistance (mcr-1)' }
     ]
@@ -443,19 +444,9 @@ const toolCategories = [
   }
 ]
 
-const genusItems = [
-  'Acinetobacter', 'Bacillus', 'Burkholderia', 'Campylobacter', 'Clostridioides',
-  'Clostridium', 'Corynebacterium', 'Enterobacter', 'Enterococcus', 'Escherichia',
-  'Haemophilus', 'Helicobacter', 'Klebsiella', 'Legionella', 'Listeria',
-  'Mycobacterium', 'Neisseria', 'Pseudomonas', 'Salmonella', 'Serratia',
-  'Shigella', 'Staphylococcus', 'Streptococcus', 'Vibrio', 'Yersinia'
-]
-
-const speciesItems = [
-  'aeruginosa', 'anthracis', 'aureus', 'baumannii', 'cereus', 'coli',
-  'difficile', 'enterica', 'faecalis', 'faecium', 'influenzae',
-  'monocytogenes', 'pneumoniae', 'pyogenes', 'tuberculosis', 'typhimurium'
-]
+import taxonomy from '../data/taxonomy.json'
+const genusItems = taxonomy.genera
+const speciesItems = taxonomy.species
 
 import { scroll, openURL } from 'quasar'
 const { getScrollTarget, setScrollPosition } = scroll
@@ -470,8 +461,8 @@ export default {
       files: null,
       info: {
         sampleName: 'My_Sample1',
-        genus: genusItems[9], // Escherichia
-        species: speciesItems[5], // coli
+        genus: 'Escherichia',
+        species: 'coli',
         genomeSize: '5m',
         description: null
       },

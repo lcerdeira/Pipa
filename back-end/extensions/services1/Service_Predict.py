@@ -93,6 +93,14 @@ TOOL_REGISTRY = [
         "description": "Resistance genes",
     },
     {
+        "key": "abricate_vfdb", "name": "Abricate (VFDB)", "category": "resistance",
+        "command": "abricate",
+        "args_template": ["--db", "vfdb", "{fasta}"],
+        "output_pattern": "{tool_dir}/{assembler}_abricate_vfdb.tsv",
+        "capture_stdout": True,
+        "description": "Virulence factors (VFDB)",
+    },
+    {
         "key": "amrfinderplus", "name": "AMRFinderPlus", "category": "resistance",
         "command": "amrfinder",
         "args_template": ["-n", "{fasta}", "-o", "{tool_dir}/{assembler}_amrfinder.tsv"],
@@ -164,7 +172,6 @@ TOOL_REGISTRY = [
         "command": "kleborate",
         "args_template": ["--assemblies", "{fasta}", "-o", "{tool_dir}/{assembler}_kleborate.txt"],
         "output_pattern": "{tool_dir}/{assembler}_kleborate.txt",
-        "organism_filter": {"genus": "klebsiella"},
         "description": "Klebsiella typing",
     },
     {
