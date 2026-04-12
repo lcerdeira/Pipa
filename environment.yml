@@ -62,12 +62,12 @@ dependencies:
   - pbptyper
   - sccmec
   - seqsero2
-  - seroba
-  - shigatyper
-  - shigeifinder
+  # seroba removed: ariba dependency missing from channels
+  # shigatyper removed: samtools version conflict
+  # shigeifinder removed: samtools version conflict
+  # ssuissero removed: medaka 1.0.1 missing from channels
   - sistr_cmd
   - spatyper
-  - ssuissero
   - stecfinder
 
   # Utilities
