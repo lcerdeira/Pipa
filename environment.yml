@@ -47,7 +47,8 @@ dependencies:
   # Organism-Specific Typing
   - kleborate
   - staphopia-sccmec
-  - tb-profiler
+  # tb-profiler removed: pathogen-profiler dependency conflict
+  # Install separately: conda create -n tbprofiler tb-profiler
   - ectyper
   - emmtyper
   - genotyphi
