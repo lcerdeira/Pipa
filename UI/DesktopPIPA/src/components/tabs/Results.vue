@@ -311,6 +311,15 @@ export default {
       link.download = file.split('/').pop()
       link.click()
     },
+    async initResults () {
+      // Always poll once to get the latest status
+      const data = await this.$store.dispatch('pipa/pollStatus')
+      if (data && (data.status === 'completed' || data.status === 'completed_with_errors')) {
+        await this.$store.dispatch('pipa/fetchResults')
+      } else if (data && data.status === 'running') {
+        this.startPolling()
+      }
+    },
     startPolling () {
       if (this.pollInterval) return
       this.pollInterval = setInterval(async () => {
@@ -343,18 +352,13 @@ export default {
   },
   mounted () {
     this.handleScroll()
-    // Start polling if pipeline is running
-    if (this.isRunning) {
-      this.startPolling()
-    }
+    this.initResults()
   },
   beforeDestroy () {
     this.stopPolling()
   },
   activated () {
-    if (this.isRunning) {
-      this.startPolling()
-    }
+    this.initResults()
   }
 }
 </script>
