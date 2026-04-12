@@ -67,7 +67,7 @@ class TrimService:
             if callback:
                 callback("Trimming Nanopore reads with Porechop")
             output_file = os.path.join(nanopore_out, "output_reads.fastq.gz")
-            command = ["porechop", "-i", nanopore_dir, "-o", output_file]
+            command = ["porechop_abi", "-i", nanopore_dir, "-o", output_file]
             self._run_cmd(command, "Porechop")
             trimmed.append(output_file)
 
