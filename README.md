@@ -36,18 +36,33 @@ Download native installers from the [Releases](https://github.com/lcerdeira/Pipa
 | **Linux (Debian/Ubuntu)** | `pipa_2.0.0_amd64.deb` | Debian-based |
 | **Linux (Universal)** | `pipa_2.0.0_amd64.AppImage` | Any 64-bit Linux |
 
+### Prerequisites
+
+The desktop app requires [Docker Desktop](https://www.docker.com/products/docker-desktop/) to run the bioinformatics backend. On first launch, PIPA automatically pulls the `lcerdeira/pipa` Docker image (~5 GB compressed) with all 47 analysis tools pre-installed. No manual configuration required.
+
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+2. Download and install PIPA from [Releases](https://github.com/lcerdeira/Pipa/releases)
+3. Launch PIPA — the backend starts automatically
+
 ## Quick Start (Docker)
 
-```bash
-# Clone the repository
-git clone https://github.com/lcerdeira/Pipa.git
-cd Pipa
+The PIPA Docker image is available on [Docker Hub](https://hub.docker.com/r/lcerdeira/pipa):
 
-# Start the backend with all bioinformatics tools
-docker-compose up -d
+```bash
+# Pull and run the backend with all 47 bioinformatics tools
+docker run -d --name pipa-backend -p 5000:5000 -v pipa-data:/data lcerdeira/pipa:latest
 
 # The API is now available at http://localhost:5000
-# See examples/run_example.sh for a usage walkthrough
+curl http://localhost:5000/api/jobs
+```
+
+Or clone the repository and build locally:
+
+```bash
+git clone https://github.com/lcerdeira/Pipa.git
+cd Pipa
+docker build -t pipa .
+docker run -d --name pipa-backend -p 5000:5000 -v pipa-data:/data pipa
 ```
 
 ## Quick Start (Web SPA)
