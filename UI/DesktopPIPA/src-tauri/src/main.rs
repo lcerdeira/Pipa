@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::process::{Child, Command, Stdio};
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use std::io::{BufRead, BufReader};
 use tauri::Manager;
 
@@ -10,11 +10,11 @@ const DOCKER_IMAGE: &str = "lcerdeira/pipa:latest";
 const CONTAINER_NAME: &str = "pipa-backend";
 const BACKEND_PORT: u16 = 5000;
 
-struct BackendProcess(Mutex<BackendState>);
+struct BackendProcess(Arc<Mutex<BackendState>>);
 
 enum BackendState {
-    Docker(String),    // container ID
-    Flask(Child),      // local Flask process
+    Docker(String),
+    Flask(Child),
     None,
 }
 
@@ -60,7 +60,6 @@ fn pull_image(window: &tauri::Window) -> bool {
 
     match child {
         Ok(mut proc) => {
-            // Stream pull progress to the frontend
             if let Some(stderr) = proc.stderr.take() {
                 let reader = BufReader::new(stderr);
                 for line in reader.lines().flatten() {
@@ -194,7 +193,7 @@ fn start_flask() -> Option<Child> {
         .ok()
 }
 
-// ── Tauri commands (callable from JS) ─────────────────────────────────────
+// ── Tauri commands ────────────────────────────────────────────────────────
 
 #[tauri::command]
 fn get_backend_mode(state: tauri::State<BackendProcess>) -> String {
@@ -210,7 +209,7 @@ fn is_docker_installed() -> bool {
     is_docker_available()
 }
 
-// ── Wait for backend to respond ───────────────────────────────────────────
+// ── Wait for backend ──────────────────────────────────────────────────────
 
 fn wait_for_backend(timeout_secs: u64) -> bool {
     let start = std::time::Instant::now();
@@ -237,35 +236,39 @@ fn wait_for_backend(timeout_secs: u64) -> bool {
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            let window = app.get_window("main").unwrap();
-            let window_clone = window.clone();
+            // Initialize with None — backend starts in background
+            let shared_state = Arc::new(Mutex::new(BackendState::None));
+            app.manage(BackendProcess(shared_state.clone()));
 
-            // Start backend in a background thread
-            let backend_state = std::thread::spawn(move || -> BackendState {
-                // Strategy: Try Docker first, fall back to local Flask
+            let window = app.get_window("main").unwrap();
+            let state = shared_state;
+
+            // DON'T block — spawn and forget, UI loads immediately
+            std::thread::spawn(move || {
+                // Try Docker first
                 if is_docker_available() {
-                    let _ = window_clone.emit("backend-status", "checking-docker");
+                    let _ = window.emit("backend-status", "checking-docker");
                     println!("[PIPA] Docker is available");
 
-                    // Pull image if not present
                     if !is_image_present() {
-                        let _ = window_clone.emit("backend-status", "pulling");
-                        if !pull_image(&window_clone) {
-                            eprintln!("[PIPA] Failed to pull image, trying local Flask");
-                            let _ = window_clone.emit("backend-status", "pull-failed");
+                        let _ = window.emit("backend-status", "pulling");
+                        if !pull_image(&window) {
+                            eprintln!("[PIPA] Failed to pull image");
+                            let _ = window.emit("backend-status", "pull-failed");
                         }
                     }
 
-                    // Start container
                     if is_image_present() {
-                        let _ = window_clone.emit("backend-status", "starting-docker");
+                        let _ = window.emit("backend-status", "starting-docker");
                         if let Some(id) = start_container() {
-                            let _ = window_clone.emit("backend-status", "waiting");
+                            let _ = window.emit("backend-status", "waiting");
                             if wait_for_backend(30) {
-                                let _ = window_clone.emit("backend-status", "ready");
-                                return BackendState::Docker(id);
+                                let _ = window.emit("backend-status", "ready");
+                                if let Ok(mut guard) = state.lock() {
+                                    *guard = BackendState::Docker(id);
+                                }
+                                return;
                             } else {
-                                eprintln!("[PIPA] Docker container started but backend not responding");
                                 stop_container();
                             }
                         }
@@ -275,22 +278,23 @@ fn main() {
                 }
 
                 // Fallback: local Flask
-                let _ = window_clone.emit("backend-status", "starting-local");
+                let _ = window.emit("backend-status", "starting-local");
                 println!("[PIPA] Falling back to local Flask");
                 if let Some(child) = start_flask() {
-                    let _ = window_clone.emit("backend-status", "waiting");
+                    let _ = window.emit("backend-status", "waiting");
                     if wait_for_backend(10) {
-                        let _ = window_clone.emit("backend-status", "ready");
-                        return BackendState::Flask(child);
+                        let _ = window.emit("backend-status", "ready");
+                        if let Ok(mut guard) = state.lock() {
+                            *guard = BackendState::Flask(child);
+                        }
+                        return;
                     }
                 }
 
-                let _ = window_clone.emit("backend-status", "failed");
-                eprintln!("[PIPA] No backend available. Install Docker Desktop or Python + Flask.");
-                BackendState::None
-            }).join().unwrap_or(BackendState::None);
+                let _ = window.emit("backend-status", "failed");
+                eprintln!("[PIPA] No backend available.");
+            });
 
-            app.manage(BackendProcess(Mutex::new(backend_state)));
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![get_backend_mode, is_docker_installed])
@@ -300,9 +304,7 @@ fn main() {
                 if let Some(state) = app.try_state::<BackendProcess>() {
                     if let Ok(mut guard) = state.0.lock() {
                         match &mut *guard {
-                            BackendState::Docker(_) => {
-                                stop_container();
-                            }
+                            BackendState::Docker(_) => stop_container(),
                             BackendState::Flask(ref mut child) => {
                                 println!("[PIPA] Stopping Flask backend");
                                 let _ = child.kill();
