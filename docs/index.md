@@ -15,18 +15,21 @@ PIPA is an integrated platform for microbial genomic analysis that supports Illu
 Raw Reads (FASTQ)                    Assembled Genome (FASTA)
        |                                       |
   [Trimming]                                   |
-  Trim Galore / Porechop                       |
+  Trim Galore / Porechop_ABI                   |
        |                                       |
   [Assembly]                                   |
   SPAdes / Canu / Flye / Unicycler             |
        |                                       |
        +---------------------------------------+
        |
-  [Annotation]  <-- Choose your tools:
-  Prokka, MLST, Barrnap, Abricate,
-  AMRFinderPlus, PlasmidFinder, MOB-suite,
-  CRISPRCasFinder, tRNAscan-SE, Phigaro,
-  Kleborate, KOFAM
+  [Annotation]  <-- 47 tools in 5 categories:
+  General: Prokka, Bakta, MLST, Barrnap,
+           tRNAscan-SE, EggNOG, KOFAM
+  Quality: BUSCO, CheckM, QUAST
+  Resistance: Abricate, AMRFinderPlus, mcroni
+  Mobile: PlasmidFinder, MOB-suite, Phigaro,
+          PhiSpy, CRISPRCasFinder, DefenseFinder
+  Typing: 27 organism-specific tools
        |
   [Report]
   KEGG-decoder
@@ -42,20 +45,33 @@ Upload raw sequencing reads (FASTQ) from Illumina, Nanopore, or PacBio. PIPA wil
 
 ## Features
 
-- **Generic organism support** - works with any bacterial genome, not limited to a specific species
+- **47 bioinformatics tools** organized in 5 categories
+- **Generic organism support** - works with any bacterial genome
+- **27 organism-specific typing tools** - auto-enabled based on genus/species
 - **Selectable tools** - choose exactly which annotation tools to run
+- **Desktop application** - native apps for macOS, Windows, Linux with Docker auto-setup
 - **Async pipeline** - submit jobs and monitor progress in real-time
 - **REST API** - programmatic access to all pipeline functionality
-- **Docker support** - reproducible deployment with all tools pre-installed
+- **Docker support** - all tools pre-installed in [`lcerdeira/pipa`](https://hub.docker.com/r/lcerdeira/pipa) image
 
 ## Quick Start
 
-```bash
-# Docker (recommended)
-docker-compose up -d
-# Open http://localhost:8080
+### Desktop App (recommended)
 
-# Or local install
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+2. Download PIPA from [GitHub Releases](https://github.com/lcerdeira/Pipa/releases)
+3. Launch — backend starts automatically
+
+### Docker (standalone)
+
+```bash
+docker run -d --name pipa -p 5000:5000 -v pipa-data:/data lcerdeira/pipa:latest
+# API available at http://localhost:5000
+```
+
+### Conda
+
+```bash
 conda env create -f environment.yml
 conda activate pipa
 cd back-end && flask run --host 0.0.0.0 --port 5000

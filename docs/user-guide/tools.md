@@ -1,13 +1,13 @@
 # Supported Tools
 
-PIPA includes **47 bioinformatics tools** organized into 7 categories.
+PIPA includes **48 bioinformatics tools** organized into 7 categories.
 
 ## Trimming Tools
 
 | Tool | Purpose | Reference |
 |------|---------|-----------|
 | [Trim Galore](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/) | Quality/adapter trimming for Illumina | Krueger F (2012) |
-| [Porechop](https://github.com/rrwick/Porechop) | Adapter removal for Nanopore | Wick RR (2017) |
+| [Porechop_ABI](https://github.com/bonsai-team/Porechop_ABI) | Adapter removal for Nanopore | Bonenfant Q et al. (2023) |
 
 ## Assembly Tools
 
@@ -42,7 +42,8 @@ PIPA includes **47 bioinformatics tools** organized into 7 categories.
 
 | Tool | Purpose | Reference |
 |------|---------|-----------|
-| [Abricate](https://github.com/tseemann/abricate) | Resistance gene screening | Seemann T |
+| [Abricate](https://github.com/tseemann/abricate) | Resistance gene screening (NCBI) | Seemann T |
+| [Abricate VFDB](https://github.com/tseemann/abricate) | Virulence factor detection (VFDB) | Seemann T |
 | [AMRFinderPlus](https://github.com/ncbi/amr) | NCBI AMR detection | Feldgarden M et al. (2021) |
 | [mcroni](https://github.com/liampshaw/mcroni) | Colistin resistance (mcr-1 variation) | Shaw LP et al. |
 

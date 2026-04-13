@@ -17,12 +17,20 @@ PIPA is an integrated platform for microbial genomic analysis that supports Illu
 
 | Stage | Tools | Description |
 |-------|-------|-------------|
-| **Trimming** | Trim Galore, Porechop | Quality trimming of Illumina and Nanopore reads |
+| **Trimming** | Trim Galore, Porechop_ABI | Quality trimming of Illumina and Nanopore reads |
 | **Assembly** | SPAdes, Canu, Flye, Unicycler | Genome assembly from short and long reads |
-| **Prediction** | Prokka, MLST, Barrnap, Abricate, AMRFinderPlus, Kleborate*, Phigaro, KOFAM | Gene annotation, typing, resistance, and phage detection |
+| **Annotation** | 47 tools across 5 categories (see below) | Gene annotation, typing, resistance, virulence, and more |
 | **Report** | KEGG-decoder | Functional pathway visualization |
 
-*\*Kleborate runs only when genus is Klebsiella*
+### Annotation Tools (47 total)
+
+| Category | Tools |
+|----------|-------|
+| **General Annotation** | Prokka, Bakta, MLST, Barrnap, tRNAscan-SE, EggNOG-mapper, KOFAM |
+| **Assembly Quality** | BUSCO, CheckM, QUAST |
+| **Resistance & Virulence** | Abricate (NCBI), Abricate (VFDB), AMRFinderPlus, mcroni |
+| **Mobile Elements & Defense** | PlasmidFinder, MOB-suite, Phigaro, PhiSpy, CRISPRCasFinder, DefenseFinder, ISMapper |
+| **Organism-Specific Typing** | Kleborate, staphtyper, TBProfiler, ClermonTyping, ECTyper, emmtyper, GenoTyphi, hicap, HpSuisSero, legsta, LisSero, meningotype, ngmaster, pasty, pbptyper, PneumoCaT, sccmec, SeqSero2, SeroBA, ShigaPass, ShigaTyper, ShigEiFinder, SISTR, spaTyper, SsuisSero, staphopia-sccmec, STECFinder |
 
 ## Desktop Application
 
