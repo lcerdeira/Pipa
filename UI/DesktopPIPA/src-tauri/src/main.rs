@@ -21,13 +21,29 @@ enum BackendState {
 // ── Docker helpers ────────────────────────────────────────────────────────
 
 fn is_docker_available() -> bool {
-    Command::new("docker")
+    // Use a short timeout — don't wait for Docker Desktop to start
+    let child = Command::new("docker")
         .args(["info"])
         .stdout(Stdio::null())
         .stderr(Stdio::null())
-        .status()
-        .map(|s| s.success())
-        .unwrap_or(false)
+        .spawn();
+
+    match child {
+        Ok(mut proc) => {
+            // Wait max 3 seconds
+            for _ in 0..6 {
+                match proc.try_wait() {
+                    Ok(Some(status)) => return status.success(),
+                    Ok(None) => std::thread::sleep(std::time::Duration::from_millis(500)),
+                    Err(_) => return false,
+                }
+            }
+            // Timed out — Docker is not ready
+            let _ = proc.kill();
+            false
+        }
+        Err(_) => false,
+    }
 }
 
 fn is_image_present() -> bool {
