@@ -19,10 +19,10 @@ PIPA is an integrated platform for microbial genomic analysis that supports Illu
 |-------|-------|-------------|
 | **Trimming** | Trim Galore, Porechop_ABI | Quality trimming of Illumina and Nanopore reads |
 | **Assembly** | SPAdes, Canu, Flye, Unicycler | Genome assembly from short and long reads |
-| **Annotation** | 47 tools across 5 categories (see below) | Gene annotation, typing, resistance, virulence, and more |
+| **Annotation** | 48 tools across 5 categories (see below) | Gene annotation, typing, resistance, virulence, and more |
 | **Report** | KEGG-decoder | Functional pathway visualization |
 
-### Annotation Tools (47 total)
+### Annotation Tools (48 total)
 
 | Category | Tools |
 |----------|-------|
@@ -46,7 +46,7 @@ Download native installers from the [Releases](https://github.com/lcerdeira/Pipa
 
 ### Prerequisites
 
-The desktop app requires [Docker Desktop](https://www.docker.com/products/docker-desktop/) to run the bioinformatics backend. On first launch, PIPA automatically pulls the `lcerdeira/pipa` Docker image (~5 GB compressed) with all 47 analysis tools pre-installed. No manual configuration required.
+The desktop app requires [Docker Desktop](https://www.docker.com/products/docker-desktop/) to run the bioinformatics backend. On first launch, PIPA automatically pulls the `lcerdeira/pipa` Docker image (~5 GB compressed) with all 48 analysis tools pre-installed. No manual configuration required.
 
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 2. Download and install PIPA from [Releases](https://github.com/lcerdeira/Pipa/releases)
@@ -57,7 +57,7 @@ The desktop app requires [Docker Desktop](https://www.docker.com/products/docker
 The PIPA Docker image is available on [Docker Hub](https://hub.docker.com/r/lcerdeira/pipa):
 
 ```bash
-# Pull and run the backend with all 47 bioinformatics tools
+# Pull and run the backend with all 48 bioinformatics tools
 docker run -d --name pipa-backend -p 5000:5000 -v pipa-data:/data lcerdeira/pipa:latest
 
 # The API is now available at http://localhost:5000
