@@ -2,14 +2,29 @@ version: "3.8"
 
 services:
   backend:
-    build: .
-    ports:
-      - "5000:5000"
+    image: lcerdeira/pipa:latest
+    container_name: pipa-backend
     volumes:
       - pipa-data:/data
     environment:
       - PIPA_DATA_DIR=/data
       - FLASK_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/jobs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.frontend
+    container_name: pipa-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
     restart: unless-stopped
 
 volumes:
